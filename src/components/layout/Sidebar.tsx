@@ -10,13 +10,9 @@ import {
   BarChart2, 
   Calendar, 
   Bell, 
-  Settings,
-  Circle,
-  Menu,
-  X
+  Settings
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
 
 const NAV_ITEMS = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -29,95 +25,107 @@ const NAV_ITEMS = [
 
 export function Sidebar() {
   const pathname = usePathname();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <>
-      {/* Desktop Sidebar */}
-      <aside className="fixed left-0 top-0 z-40 hidden h-screen w-[220px] flex-col border-r border-border bg-bg-sidebar px-4 py-6 text-white md:flex">
-        <div className="mb-10 px-2">
-          <div className="flex items-center gap-2">
-            <TrendingUp className="h-8 w-8 text-accent" />
-            <h1 className="font-bebas text-3xl tracking-wider text-accent">EDGEIQ</h1>
-          </div>
-          <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">Pro Analyst</p>
+      {/* Desktop Sidebar (fixed 220px width, #060a0f background always) */}
+      <aside className="fixed left-0 top-0 z-50 hidden h-screen w-[220px] flex-col border-r border-[#1a2540] bg-[#060a0f] py-6 text-white md:flex">
+        {/* Logo Section */}
+        <div className="mb-6 px-6">
+          <Link href="/dashboard" className="flex items-center gap-2.5">
+            <div className="h-2 w-2 rounded-sm bg-[#00d084]" />
+            <span className="font-bebas text-[22px] tracking-wider text-white">EDGEIQ</span>
+          </Link>
+          <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.2em] text-[#94a3b8]">
+            PRO ANALYST
+          </p>
         </div>
 
-        <div className="mb-8 flex items-center gap-2 px-2">
-          <div className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75"></span>
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-accent"></span>
+        {/* AI Badge */}
+        <div className="mx-4 mb-6">
+          <div className="flex items-center gap-2 rounded-[6px] border border-[rgba(0,208,132,0.20)] bg-[rgba(0,208,132,0.10)] px-2.5 py-1.5">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#00d084] opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#00d084]" />
+            </span>
+            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#00d084]">
+              AI ENGINE LIVE
+            </span>
           </div>
-          <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-accent">AI Engine Live</span>
         </div>
 
-        <nav className="flex-1 space-y-1">
+        {/* Navigation Items */}
+        <nav className="flex-1 space-y-1 pr-3">
           {NAV_ITEMS.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive = pathname === item.href || (item.href === "/dashboard" && pathname === "/");
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all duration-200 group",
-                  isActive 
-                    ? "bg-accent/10 text-accent font-medium" 
-                    : "text-text-secondary hover:bg-white/5 hover:text-white"
+                  "flex items-center gap-3 px-4 py-2.5 text-xs transition-all duration-150 font-sans",
+                  isActive
+                    ? "rounded-r-[8px] border-l-2 border-l-[#00d084] bg-[rgba(0,208,132,0.12)] text-white font-semibold"
+                    : "rounded-[8px] ml-3 text-[#94a3b8] hover:bg-[rgba(255,255,255,0.06)] hover:text-white"
                 )}
               >
-                <item.icon className={cn(
-                  "h-5 w-5",
-                  isActive ? "text-accent" : "text-text-muted group-hover:text-white"
-                )} />
-                <span className="text-sm">{item.name}</span>
+                <item.icon
+                  className={cn(
+                    "h-4 w-4 shrink-0",
+                    isActive ? "text-[#00d084]" : "text-[#94a3b8] group-hover:text-white"
+                  )}
+                />
+                <span className="truncate">{item.name}</span>
               </Link>
             );
           })}
         </nav>
 
-        <div className="mt-auto space-y-1 pt-6 border-t border-white/10">
-          <Link
-            href="/alerts"
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-text-secondary hover:bg-white/5 hover:text-white transition-all"
-          >
-            <Bell className="h-5 w-5" />
-            <span className="text-sm">Alerts</span>
-          </Link>
+        {/* Bottom Section */}
+        <div className="mt-auto space-y-1.5 px-4 pt-4 border-t border-[rgba(255,255,255,0.08)]">
           <Link
             href="/settings"
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-text-secondary hover:bg-white/5 hover:text-white transition-all"
+            className={cn(
+              "flex items-center gap-3 rounded-[8px] px-3 py-2 text-xs transition-colors font-sans",
+              pathname === "/settings"
+                ? "bg-[rgba(255,255,255,0.08)] text-white font-medium"
+                : "text-[#94a3b8] hover:bg-[rgba(255,255,255,0.06)] hover:text-white"
+            )}
           >
-            <Settings className="h-5 w-5" />
-            <span className="text-sm">Settings</span>
+            <Settings className="h-4 w-4" />
+            <span>Settings</span>
           </Link>
-          
-          <div className="mt-4 flex items-center gap-3 px-3 py-4 bg-white/5 rounded-xl border border-white/10">
-            <div className="h-8 w-8 rounded-full bg-accent/20 flex items-center justify-center text-accent font-bold">
-              JD
+
+          {/* User Card */}
+          <div className="flex items-center gap-3 rounded-[8px] bg-[rgba(255,255,255,0.06)] p-2.5 border border-[rgba(255,255,255,0.08)] mt-3">
+            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#00d084] text-xs font-bold text-black">
+              GS
             </div>
             <div className="overflow-hidden">
-              <p className="text-xs font-bold truncate">John Doe</p>
-              <p className="text-[10px] text-text-muted truncate">Pro Plan</p>
+              <p className="text-[12px] font-medium text-white truncate leading-tight">Analyst Terminal</p>
+              <p className="text-[11px] text-[#94a3b8] truncate">Institutional Tier</p>
             </div>
           </div>
         </div>
       </aside>
 
-      {/* Mobile Bottom Tab Bar */}
-      <nav className="fixed bottom-0 left-0 z-50 flex w-full items-center justify-around border-t border-border bg-bg-sidebar px-2 py-3 md:hidden">
+      {/* Mobile Bottom Tab Bar (64px height, #060a0f background) */}
+      <nav className="fixed bottom-0 left-0 z-50 flex h-[64px] w-full items-center justify-around border-t border-[#1a2540] bg-[#060a0f] px-2 md:hidden">
         {NAV_ITEMS.slice(0, 5).map((item) => {
-          const isActive = pathname === item.href;
+          const isActive = pathname === item.href || (item.href === "/dashboard" && pathname === "/");
           return (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                "flex flex-col items-center gap-1 px-3 py-1 transition-all",
-                isActive ? "text-accent" : "text-text-muted"
+                "flex flex-col items-center gap-1 transition-colors",
+                isActive ? "text-[#00d084]" : "text-[#94a3b8] hover:text-white"
               )}
             >
               <item.icon className="h-5 w-5" />
-              <span className="text-[10px] font-medium">{item.name.split(' ')[0]}</span>
+              <span className="text-[10px] font-sans font-medium">
+                {item.name.split(" ")[0]}
+              </span>
             </Link>
           );
         })}
@@ -125,3 +133,4 @@ export function Sidebar() {
     </>
   );
 }
+

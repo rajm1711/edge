@@ -7,7 +7,6 @@ import { Layers } from "lucide-react";
 import { formatPercent } from "@/lib/utils";
 import { Treemap, ResponsiveContainer, Tooltip } from "recharts";
 
-// Static mapping of known tickers to their respective GICS sectors
 const SECTOR_MAP: Record<string, string> = {
   AAPL: "Technology", NVDA: "Technology", MSFT: "Technology", AMD: "Technology", INTC: "Technology", PLTR: "Technology", IBM: "Technology", CRM: "Technology",
   TSLA: "Consumer Cyclical", AMZN: "Consumer Cyclical", HD: "Consumer Cyclical", NKE: "Consumer Cyclical", SBUX: "Consumer Cyclical",
@@ -27,20 +26,16 @@ interface StockData {
 }
 
 const getHeatmapColor = (changePercent: number) => {
-  if (changePercent === undefined || changePercent === null) return "#334155";
-  if (changePercent > 2) return "#10b981";
-  if (changePercent > 0.5) return "#059669";
-  if (changePercent > 0) return "#047857";
-  if (changePercent < -2) return "#ef4444";
-  if (changePercent < -0.5) return "#dc2626";
-  if (changePercent < 0) return "#b91c1c";
-  return "#334155";
+  if (changePercent === undefined || changePercent === null) return "#1a2540";
+  if (changePercent > 2) return "#00d084";
+  if (changePercent > 0) return "#009961";
+  if (changePercent < -2) return "#ff4d4d";
+  if (changePercent < 0) return "#cc3d3d";
+  return "#1a2540";
 };
 
 const CustomizedContent = (props: any) => {
   const { x, y, width, height, name, changePercent } = props;
-
-  // We are using a flat list now, so every node is a leaf (stock)
   const color = getHeatmapColor(changePercent);
 
   return (
@@ -52,34 +47,36 @@ const CustomizedContent = (props: any) => {
         height={height}
         style={{
           fill: color,
-          stroke: "#0f172a", // Dark border between cells
+          stroke: "#0d1421",
           strokeWidth: 2,
         }}
-        className="transition-all duration-300 hover:opacity-80 cursor-crosshair"
+        className="transition-opacity duration-100 hover:opacity-85 cursor-pointer"
       />
-      {width > 40 && height > 30 && (
+      {width > 36 && height > 24 && (
         <>
           <text
             x={x + width / 2}
-            y={y + height / 2 - 4}
+            y={y + height / 2 - 3}
             textAnchor="middle"
             fill="#ffffff"
-            fontSize={15}
+            fontSize={13}
             fontWeight={600}
-            className="tracking-wide pointer-events-none drop-shadow-md"
+            fontFamily="var(--font-jetbrains)"
+            className="pointer-events-none uppercase"
           >
             {name}
           </text>
           <text
             x={x + width / 2}
-            y={y + height / 2 + 12}
+            y={y + height / 2 + 11}
             textAnchor="middle"
             fill="#ffffff"
-            fontSize={11}
+            fontSize={10}
             fontWeight={500}
-            className="font-mono pointer-events-none opacity-90 drop-shadow-md"
+            fontFamily="var(--font-jetbrains)"
+            className="pointer-events-none opacity-90"
           >
-            {formatPercent(changePercent)}
+            {changePercent >= 0 ? "+" : ""}{formatPercent(changePercent)}
           </text>
         </>
       )}
@@ -93,13 +90,13 @@ const CustomTooltip = ({ active, payload }: any) => {
     const isPositive = data.changePercent >= 0;
 
     return (
-      <div className="bg-bg-card/95 border border-border/50 backdrop-blur-md p-3 rounded-lg shadow-xl">
-        <p className="font-bebas text-lg tracking-wider mb-1">{data.name}</p>
-        <p className="text-xs font-mono text-text-muted mb-2 uppercase">{data.sector}</p>
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-mono font-bold text-text-primary uppercase">Change:</span>
-          <span className={`text-sm font-mono font-bold ${isPositive ? 'text-success' : 'text-danger'}`}>
-            {formatPercent(data.changePercent)}
+      <div className="bg-[#0d1421] border border-[#243358] p-3 rounded-[8px] shadow-xl font-sans">
+        <p className="font-mono font-medium text-[14px] text-white uppercase mb-0.5">{data.name}</p>
+        <p className="text-[11px] font-sans text-[#718096] uppercase mb-2">{data.sector}</p>
+        <div className="flex items-center gap-2 font-mono text-[12px]">
+          <span className="text-[#4a5568]">Change:</span>
+          <span className={isPositive ? "text-[#00d084]" : "text-[#ff4d4d]"}>
+            {isPositive ? "+" : ""}{formatPercent(data.changePercent)}
           </span>
         </div>
       </div>
@@ -112,7 +109,6 @@ export function SectorHeatmap({ data }: { data: StockData[] }) {
   const treeData = useMemo(() => {
     if (!data || data.length === 0) return [];
 
-    // Sort to group sectors together visually in the treemap
     const sorted = [...data].sort((a, b) => {
       const sA = SECTOR_MAP[a.symbol] || "Other";
       const sB = SECTOR_MAP[b.symbol] || "Other";
@@ -124,7 +120,7 @@ export function SectorHeatmap({ data }: { data: StockData[] }) {
 
     return sorted.map((s) => ({
       name: s.symbol,
-      size: 100, // Uniform weight for now
+      size: 100,
       changePercent: s.changePercent,
       sector: SECTOR_MAP[s.symbol] || "Other"
     }));
@@ -133,18 +129,18 @@ export function SectorHeatmap({ data }: { data: StockData[] }) {
   const sectorCount = new Set(data?.map(s => SECTOR_MAP[s.symbol] || "Other")).size;
 
   return (
-    <Card variant="premium" className="h-[400px] flex flex-col border-blue/10 overflow-hidden">
-      <CardHeader className="flex flex-row justify-between items-center py-3 bg-blue/5 border-b border-border/50 shrink-0">
+    <Card variant="terminal" className="h-[380px] flex flex-col overflow-hidden">
+      <CardHeader className="flex flex-row justify-between items-center py-3 border-b border-border shrink-0">
         <div className="flex items-center gap-2">
-          <Layers className="h-4 w-4 text-blue" />
-          <h3 className="font-bebas text-lg tracking-wide uppercase">Market Treemap</h3>
+          <Layers className="h-4 w-4 text-info" />
+          <h3 className="font-bebas text-[18px] tracking-wide uppercase text-text-primary">Market Treemap</h3>
         </div>
-        <Badge variant="outline" className="font-mono bg-bg-card">{sectorCount} Sectors</Badge>
+        <Badge variant="outline" className="font-mono text-[10px]">{sectorCount} Sectors</Badge>
       </CardHeader>
       <CardContent className="p-2 flex-1 relative">
         {data.length === 0 ? (
           <div className="h-full flex items-center justify-center">
-            <p className="text-xs font-mono uppercase text-text-muted animate-pulse">Mapping Market Data...</p>
+            <p className="text-[11px] font-mono uppercase text-text-muted">Mapping Market Treemap...</p>
           </div>
         ) : (
           <div className="absolute inset-0 p-2">
@@ -153,7 +149,7 @@ export function SectorHeatmap({ data }: { data: StockData[] }) {
                 data={treeData}
                 dataKey="size"
                 aspectRatio={4 / 3}
-                stroke="#fff"
+                stroke="#0d1421"
                 content={<CustomizedContent />}
               >
                 <Tooltip content={<CustomTooltip />} />
@@ -165,3 +161,4 @@ export function SectorHeatmap({ data }: { data: StockData[] }) {
     </Card>
   );
 }
+

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ShieldCheck, Crosshair, History, Send, Loader2, Sparkles, AlertCircle } from "lucide-react";
+import { ShieldCheck, Crosshair, Send, Loader2, Sparkles } from "lucide-react";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -34,121 +34,135 @@ export function PreTradeChecklist({ ticker, price }: { ticker: string; price: nu
   };
 
   return (
-    <Card variant="default">
-      <CardHeader className="py-3 flex flex-row items-center justify-between">
-        <div className="flex items-center gap-2 text-blue">
-            <ShieldCheck className="h-5 w-5" />
-            <h3 className="font-bebas text-lg tracking-wide uppercase text-text-primary">Pre-Trade Risk Coach</h3>
+    <Card variant="terminal">
+      <CardHeader className="py-3 flex flex-row items-center justify-between border-b border-border">
+        <div className="flex items-center gap-2 text-info">
+          <ShieldCheck className="h-4 w-4" />
+          <h3 className="font-bebas text-[18px] tracking-wide uppercase text-text-primary">Pre-Trade Risk Coach</h3>
         </div>
         {result && (
-            <Badge variant={result.verdict === 'proceed' ? 'success' : 'danger'} className="font-bebas px-4">
-                {result.verdict}
-            </Badge>
+          <Badge variant={result.verdict === "proceed" ? "buy" : "sell"} className="font-mono text-[11px]">
+            {result.verdict}
+          </Badge>
         )}
       </CardHeader>
-      <CardContent className="p-6 space-y-6">
+      <CardContent className="p-5 space-y-5">
         {!result ? (
           <div className="space-y-4">
-            <div className="space-y-2">
-                <label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-muted ml-1">Trade Thesis</label>
-                <textarea 
-                    value={thesis}
-                    onChange={(e) => setThesis(e.target.value)}
-                    placeholder="Why are you taking this trade? (e.g. Broken resistance at $150, strong earnings momentum...)"
-                    className="w-full min-h-[100px] p-3 rounded-xl bg-bg-secondary border border-border text-xs focus:border-accent focus:outline-none transition-all placeholder:text-text-muted/50"
-                />
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-sans font-medium uppercase tracking-[0.08em] text-text-muted">
+                Trade Thesis & Setup
+              </label>
+              <textarea 
+                value={thesis}
+                onChange={(e) => setThesis(e.target.value)}
+                placeholder="Describe entry triggers, support/resistance, and catalysts..."
+                className="w-full min-h-[90px] p-3 rounded-[8px] bg-bg-secondary border border-border text-[12px] font-sans text-text-primary placeholder-text-muted focus:border-border-emphasis focus:outline-none transition-all"
+              />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                    <label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-muted ml-1">Price Level</label>
-                    <div className="relative flex items-center">
-                        <Crosshair className="absolute left-3 h-4 w-4 text-text-muted" />
-                        <input 
-                            type="text" 
-                            value={level}
-                            onChange={(e) => setLevel(e.target.value)}
-                            placeholder="e.g. $145.50"
-                            className="w-full h-10 pl-10 pr-4 rounded-xl bg-bg-secondary border border-border text-xs focus:border-accent focus:outline-none transition-all"
-                        />
-                    </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-sans font-medium uppercase tracking-[0.08em] text-text-muted">
+                  Trigger Level
+                </label>
+                <div className="relative flex items-center">
+                  <Crosshair className="absolute left-3 h-3.5 w-3.5 text-text-muted" />
+                  <input 
+                    type="text" 
+                    value={level}
+                    onChange={(e) => setLevel(e.target.value)}
+                    placeholder="e.g. $145.50"
+                    className="w-full h-9 pl-9 pr-3 rounded-[8px] bg-bg-secondary border border-border font-mono text-[12px] text-text-primary placeholder-text-muted focus:border-border-emphasis focus:outline-none transition-all"
+                  />
                 </div>
-                <div className="space-y-2">
-                    <label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-muted ml-1">Horizon</label>
-                    <select 
-                        value={horizon}
-                        onChange={(e) => setHorizon(e.target.value)}
-                        className="w-full h-10 px-4 rounded-xl bg-bg-secondary border border-border text-xs focus:border-accent focus:outline-none transition-all appearance-none cursor-pointer"
-                    >
-                        <option value="intraday">Intraday</option>
-                        <option value="swing">Swing</option>
-                        <option value="positional">Positional</option>
-                    </select>
-                </div>
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-sans font-medium uppercase tracking-[0.08em] text-text-muted">
+                  Time Horizon
+                </label>
+                <select 
+                  value={horizon}
+                  onChange={(e) => setHorizon(e.target.value)}
+                  className="w-full h-9 px-3 rounded-[8px] bg-bg-secondary border border-border text-[12px] font-sans text-text-primary focus:border-border-emphasis focus:outline-none transition-all cursor-pointer"
+                >
+                  <option value="intraday">Intraday</option>
+                  <option value="swing">Swing Trade</option>
+                  <option value="positional">Positional</option>
+                </select>
+              </div>
             </div>
 
             <Button 
-                onClick={analyzeTrade} 
-                className="w-full bg-blue text-white hover:bg-blue/90"
-                isLoading={isLoading}
-                disabled={!thesis || !level}
+              onClick={analyzeTrade} 
+              disabled={!thesis || !level || isLoading}
+              className="w-full h-[38px] bg-positive text-black font-medium hover:bg-positive/90 rounded-[8px] text-[12px] font-mono uppercase tracking-wider transition-colors"
             >
-                <Send className="h-4 w-4 mr-2" />
-                Analyze Trade Idea
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>Evaluating Risk Parameters...</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Send className="h-3.5 w-3.5" />
+                  <span>Score My Research</span>
+                </div>
+              )}
             </Button>
           </div>
         ) : (
-          <div className="space-y-6 animate-in fade-in zoom-in-95 duration-500">
-            <div className="flex items-center justify-between gap-6 pb-6 border-b border-border">
-                <div className="flex flex-col items-center justify-center h-16 w-16 rounded-2xl bg-border/20 border-2 border-accent">
-                    <span className="text-2xl font-bebas text-accent">{result.grade}</span>
-                    <span className="text-[8px] font-mono font-bold text-text-muted uppercase -mt-1">Grade</span>
+          <div className="space-y-5 animate-in fade-in duration-300">
+            {/* Score Banner */}
+            <div className="flex items-center gap-4 p-4 rounded-[8px] border-l-[3px] border-l-ai-purple border-y border-r border-border bg-ai-purple-dim">
+              <div className="flex flex-col items-center justify-center h-14 w-14 rounded-[8px] bg-bg-card border border-border shrink-0">
+                <span className="font-bebas text-[28px] text-ai-purple leading-none">{result.grade}</span>
+                <span className="text-[9px] font-mono text-text-muted uppercase">Grade</span>
+              </div>
+              <div className="flex-1">
+                <div className="flex justify-between items-center mb-1 font-mono text-[11px]">
+                  <span className="text-text-muted uppercase">Research Score</span>
+                  <span className="text-positive font-medium">{result.overallScore}/100</span>
                 </div>
-                <div className="flex-1">
-                    <div className="flex justify-between items-center mb-1">
-                        <span className="text-[10px] font-mono font-bold uppercase text-text-muted">Research Score</span>
-                        <span className="text-xs font-mono font-bold text-accent">{result.overallScore}/100</span>
-                    </div>
-                    <div className="h-2 w-full bg-bg-secondary rounded-full overflow-hidden">
-                        <div className="h-full bg-accent" style={{ width: `${result.overallScore}%` }} />
-                    </div>
+                <div className="h-1.5 w-full bg-border rounded-full overflow-hidden">
+                  <div className="h-full bg-positive" style={{ width: `${result.overallScore}%` }} />
                 </div>
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-3">
-                    <h5 className="text-[10px] font-mono font-bold uppercase tracking-widest text-accent">Green Flags</h5>
-                    {result.greenFlags.map((flag: string, i: number) => (
-                        <div key={i} className="flex items-start gap-2 text-[11px] text-text-secondary leading-tight">
-                            <div className="mt-1 h-1.5 w-1.5 rounded-full bg-accent flex-shrink-0" />
-                            {flag}
-                        </div>
-                    ))}
-                </div>
-                <div className="space-y-3">
-                    <h5 className="text-[10px] font-mono font-bold uppercase tracking-widest text-red">Red Flags</h5>
-                    {result.redFlags.map((flag: string, i: number) => (
-                        <div key={i} className="flex items-start gap-2 text-[11px] text-text-secondary leading-tight">
-                            <div className="mt-1 h-1.5 w-1.5 rounded-full bg-red flex-shrink-0" />
-                            {flag}
-                        </div>
-                    ))}
-                </div>
+            {/* Flags */}
+            <div className="grid grid-cols-1 gap-4">
+              <div className="space-y-1.5">
+                <h5 className="font-sans text-[11px] font-medium uppercase tracking-[0.08em] text-positive">Green Flags</h5>
+                {result.greenFlags?.map((flag: string, i: number) => (
+                  <div key={i} className="flex items-start gap-2 text-[12px] text-text-primary">
+                    <span className="h-1.5 w-1.5 rounded-full bg-positive shrink-0 mt-1.5" />
+                    <span>{flag}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="space-y-1.5">
+                <h5 className="font-sans text-[11px] font-medium uppercase tracking-[0.08em] text-negative">Red Flags</h5>
+                {result.redFlags?.map((flag: string, i: number) => (
+                  <div key={i} className="flex items-start gap-2 text-[12px] text-text-primary">
+                    <span className="h-1.5 w-1.5 rounded-full bg-negative shrink-0 mt-1.5" />
+                    <span>{flag}</span>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <div className="bg-blue/5 rounded-xl p-4 border border-blue/10">
-                <h5 className="text-[10px] font-mono font-bold uppercase text-blue mb-2 flex items-center gap-2">
-                    <History className="h-3 w-3" /> Coach Insight
-                </h5>
-                <p className="text-xs text-text-primary italic leading-relaxed">&quot;{result.suggestion}&quot;</p>
+            {/* Suggestion */}
+            <div className="rounded-[8px] bg-bg-secondary p-3.5 border border-border">
+              <span className="text-[10px] font-mono text-ai-purple uppercase block mb-1">Coach Suggestion</span>
+              <p className="text-[12px] text-text-secondary italic leading-relaxed">&quot;{result.suggestion}&quot;</p>
             </div>
 
             <Button 
-                variant="outline" 
-                onClick={() => setResult(null)} 
-                className="w-full text-[10px] uppercase font-bold tracking-widest"
+              onClick={() => setResult(null)} 
+              className="w-full h-8 bg-transparent border border-border text-text-secondary hover:bg-bg-hover hover:text-text-primary rounded-[6px] text-[10px] font-mono uppercase tracking-wider"
             >
-                Reset & New Analysis
+              Reset & New Analysis
             </Button>
           </div>
         )}
@@ -156,3 +170,4 @@ export function PreTradeChecklist({ ticker, price }: { ticker: string; price: nu
     </Card>
   );
 }
+

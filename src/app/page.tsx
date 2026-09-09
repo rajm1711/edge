@@ -18,6 +18,7 @@ const ITEMS_PER_PAGE = 10;
 export default function HomePage() {
   const [earningsStocks, setEarningsStocks] = useState<any[]>([]);
   const [watchlist, setWatchlist] = useState<any[]>([]);
+  const [quotesMap, setQuotesMap] = useState<Record<string, any>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState(new Date());
   const [currentPage, setCurrentPage] = useState(1);
@@ -51,13 +52,11 @@ export default function HomePage() {
     const query = searchQuery.toLowerCase().trim();
     return data.filter((item) => {
       if (showEarnings) {
-        // Search in ticker, company name for earnings stocks
         return (
           item.ticker?.toLowerCase().includes(query) ||
           item.companyName?.toLowerCase().includes(query)
         );
       } else {
-        // Search in symbol for watchlist
         return item.symbol?.toLowerCase().includes(query);
       }
     });
@@ -82,11 +81,31 @@ export default function HomePage() {
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const paginatedData = filteredData.slice(startIndex, endIndex);
 
+  // Fetch real-time quotes for visible earnings tickers
+  useEffect(() => {
+    if (showEarnings && paginatedData.length > 0) {
+      const tickersToFetch = paginatedData
+        .map((item: any) => item.ticker)
+        .filter((t: string) => t && !watchlist.some((w: any) => w.symbol === t) && !quotesMap[t]);
+
+      if (tickersToFetch.length > 0) {
+        apiClient.getWatchlist(tickersToFetch.join(",")).then((res) => {
+          if (res.success && res.data) {
+            const newMap: Record<string, any> = {};
+            res.data.forEach((q: any) => {
+              newMap[q.symbol] = q;
+            });
+            setQuotesMap((prev) => ({ ...prev, ...newMap }));
+          }
+        });
+      }
+    }
+  }, [showEarnings, currentPage, earningsStocks, watchlist, quotesMap]);
+
   // Merge earnings data with stock data for display
   const displayData = paginatedData.map((item: any) => {
     if (showEarnings) {
-      // Find corresponding stock data from watchlist
-      const stockData = watchlist.find((stock: any) => stock.symbol === item.ticker);
+      const stockData = watchlist.find((stock: any) => stock.symbol === item.ticker) || quotesMap[item.ticker];
       return {
         ...item,
         price: stockData?.price,

@@ -155,7 +155,7 @@ export default function JournalPage() {
                 </div>
 
                 {summaryData && (
-                    <Card variant="premium" className="bg-accent/5 border-accent/20 animate-in slide-in-from-top-4 duration-500 overflow-hidden">
+                    <Card variant="ai" className="bg-accent/5 border-accent/20 animate-in slide-in-from-top-4 duration-500 overflow-hidden">
                         <div className="absolute top-0 right-0 p-4 opacity-10">
                             <Sparkles className="h-24 w-24 text-accent" />
                         </div>
@@ -521,7 +521,7 @@ export default function JournalPage() {
                                             <p className="text-xs text-text-primary leading-relaxed">{autopsyData.lesson}</p>
                                         </div>
 
-                                        <Card variant="premium" className="bg-accent/5 border-accent/20">
+                                        <Card variant="ai" className="bg-accent/5 border-accent/20">
                                             <CardContent className="p-3">
                                                 <div className="flex items-center gap-3">
                                                     <div className="p-2 bg-accent rounded-lg text-bg-sidebar">

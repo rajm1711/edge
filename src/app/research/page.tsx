@@ -82,7 +82,7 @@ function ResearchContent() {
   };
 
   return (
-    <div className="max-w-[1400px] mx-auto space-y-8 pb-12">
+    <div className="w-full max-w-[1400px] mx-auto space-y-8 pb-12 min-w-0">
         {/* Search Section */}
         <div className="flex flex-col gap-4">
             <div className="relative group">

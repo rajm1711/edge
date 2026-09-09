@@ -58,7 +58,7 @@ export function InsiderTransactions({ transactions, isLoading, aiAnalysis }: Ins
       </Card>
 
       {aiAnalysis && (
-        <Card variant="premium" className="border-accent/10 bg-accent/5">
+        <Card variant="ai" className="border-[rgba(167,139,250,0.20)] bg-[rgba(167,139,250,0.04)]">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 mb-3">
               <Sparkles className="h-4 w-4 text-accent" />

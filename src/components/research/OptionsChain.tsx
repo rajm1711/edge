@@ -37,7 +37,7 @@ export function OptionsChain({ ticker, options, isLoading }: OptionsChainProps) 
 
     return (
         <div className="space-y-6">
-            <Card variant="premium" className="border-accent/10">
+            <Card variant="ai" className="border-[rgba(167,139,250,0.20)]">
                 <CardHeader className="py-3 flex flex-row items-center justify-between">
                     <div className="flex items-center gap-2">
                         <Sparkles className="h-4 w-4 text-accent" />

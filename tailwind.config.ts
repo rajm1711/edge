@@ -13,6 +13,8 @@ const config: Config = {
           primary: "var(--bg-primary)",
           secondary: "var(--bg-secondary)",
           card: "var(--bg-card)",
+          hover: "var(--bg-card-hover)",
+          elevated: "var(--bg-elevated)",
           sidebar: "var(--sidebar-bg)",
         },
         text: {
@@ -20,24 +22,25 @@ const config: Config = {
           secondary: "var(--text-secondary)",
           muted: "var(--text-muted)",
         },
-        border: "var(--border)",
+        border: {
+          DEFAULT: "var(--border)",
+          emphasis: "var(--border-emphasis)",
+        },
         accent: "var(--accent)",
-        red: "var(--red)",
-        yellow: "var(--yellow)",
-        blue: "var(--blue)",
+        positive: "var(--positive)",
+        negative: "var(--negative)",
+        neutral: "var(--neutral)",
+        info: "var(--info)",
+        "ai-purple": "var(--ai-purple)",
       },
       fontFamily: {
         bebas: ["var(--font-bebas)", "sans-serif"],
         mono: ["var(--font-jetbrains)", "monospace"],
         sans: ["var(--font-dm-sans)", "sans-serif"],
       },
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-      },
     },
   },
   plugins: [],
 };
 export default config;
+

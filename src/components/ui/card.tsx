@@ -2,17 +2,19 @@ import { cn } from "@/lib/utils";
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  variant?: "default" | "premium" | "solid";
+  variant?: "default" | "terminal" | "elevated" | "ai";
 }
 
 export function Card({ children, className, variant = "default", ...props }: CardProps) {
   return (
     <div
       className={cn(
-        "rounded-xl border transition-all duration-300",
-        variant === "default" && "bg-bg-card border-border",
-        variant === "premium" && "bg-bg-card border-border hover:shadow-lg hover:border-accent/30",
-        variant === "solid" && "bg-bg-secondary border-transparent",
+        "rounded-[12px] border transition-all duration-150 font-sans",
+        (variant === "default" || variant === "terminal") &&
+          "bg-bg-card border-border hover:border-border-emphasis hover:bg-bg-hover",
+        variant === "elevated" && "bg-bg-elevated border-border",
+        variant === "ai" &&
+          "bg-ai-purple-dim border-l-[3px] border-l-ai-purple border-y border-r border-border hover:border-border-emphasis",
         className
       )}
       {...props}
@@ -23,13 +25,14 @@ export function Card({ children, className, variant = "default", ...props }: Car
 }
 
 export function CardHeader({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={cn("p-4 border-b border-border", className)}>{children}</div>;
+  return <div className={cn("px-5 py-4 border-b border-border", className)}>{children}</div>;
 }
 
 export function CardContent({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={cn("p-4", className)}>{children}</div>;
+  return <div className={cn("p-5", className)}>{children}</div>;
 }
 
 export function CardFooter({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={cn("p-4 border-t border-border", className)}>{children}</div>;
+  return <div className={cn("px-5 py-4 border-t border-border", className)}>{children}</div>;
 }
+

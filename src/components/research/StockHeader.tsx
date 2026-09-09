@@ -51,7 +51,7 @@ export function StockHeader({ profile, quote }: StockHeaderProps) {
             </span>
             <div className={cn(
               "flex items-center gap-1 font-mono font-bold text-sm",
-              isPositive ? "text-accent" : "text-red"
+              isPositive ? "text-positive" : "text-negative"
             )}>
               {isPositive ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
               {formatPercent(quote.changePercent)}
@@ -63,22 +63,22 @@ export function StockHeader({ profile, quote }: StockHeaderProps) {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-bg-secondary/30 p-4 rounded-xl border border-border/50">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-bg-card p-4 rounded-xl border border-border">
         <div className="space-y-2">
           <div className="flex justify-between text-[10px] font-mono font-bold uppercase text-text-muted tracking-widest">
             <span>52W Low</span>
             <span>Current Position</span>
             <span>52W High</span>
           </div>
-          <div className="relative h-2 w-full bg-border/30 rounded-full overflow-hidden">
+          <div className="relative h-2 w-full bg-border rounded-full overflow-hidden">
             <div
-              className={cn("absolute h-full transition-all duration-1000", isPositive ? "bg-accent" : "bg-red")}
+              className={cn("absolute h-full transition-all duration-1000", isPositive ? "bg-positive" : "bg-negative")}
               style={{ width: `${rangePercent}%` }}
             />
           </div>
           <div className="flex justify-between text-xs font-mono font-bold text-text-primary">
             <span>{formatCurrency(low)}</span>
-            <span className="text-accent">{formatPercent(rangePercent / 100 * 100)} of Range</span>
+            <span className="text-positive">{formatPercent(rangePercent / 100 * 100)} of Range</span>
             <span>{formatCurrency(high)}</span>
           </div>
         </div>

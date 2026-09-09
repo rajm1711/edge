@@ -92,7 +92,7 @@ export function EarningsHistory({ ticker, data }: EarningsHistoryProps) {
             </Card>
 
             {aiPreview && (
-                <Card variant="premium" className="bg-accent/5 border-accent/20 animate-in fade-in slide-in-from-top-2 duration-500 overflow-hidden">
+                <Card variant="ai" className="bg-[rgba(167,139,250,0.04)] border-[rgba(167,139,250,0.20)] animate-in fade-in slide-in-from-top-2 duration-500 overflow-hidden">
                     <CardContent className="p-4">
                         <div className="flex items-center gap-2 mb-4 border-b border-border pb-2">
                             <Sparkles className="h-4 w-4 text-accent" />
