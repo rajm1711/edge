@@ -1,16 +1,39 @@
 import { InferenceClient } from "@huggingface/inference";
 
-export function mapToDisplayLabel(label: string): 'bullish' | 'bearish' | 'neutral' {
+export type SentimentLabel = 'bullish' | 'bearish' | 'neutral' | 'unavailable';
+
+export interface HeadlineSentimentResult {
+  status: 'ok' | 'unavailable';
+  label: SentimentLabel;
+  score: number;
+  allScores: Array<{ label: string; score: number }>;
+  error?: string;
+}
+
+export function mapToDisplayLabel(label: string): SentimentLabel {
   const normalized = label?.toLowerCase() || '';
   if (normalized === "positive") return "bullish";
   if (normalized === "negative") return "bearish";
-  return "neutral";
+  if (normalized === "neutral") return "neutral";
+  return "unavailable";
 }
 
-export async function analyzeHeadlineSentiment(headline: string) {
+export async function analyzeHeadlineSentiment(headline: string): Promise<HeadlineSentimentResult> {
   const token = process.env.HF_TOKEN;
-  if (!token || !headline || headline.trim() === '') {
+
+  if (!token) {
     return {
+      status: 'unavailable',
+      label: 'unavailable',
+      score: 0,
+      allScores: [],
+      error: 'HF_TOKEN missing'
+    };
+  }
+
+  if (!headline || headline.trim() === '') {
+    return {
+      status: 'ok',
       label: 'neutral',
       score: 0.5,
       allScores: [{ label: 'neutral', score: 0.5 }]
@@ -18,7 +41,7 @@ export async function analyzeHeadlineSentiment(headline: string) {
   }
 
   const client = new InferenceClient(token);
-  
+
   try {
     const output = await client.textClassification({
       model: "ProsusAI/finbert",
@@ -28,9 +51,11 @@ export async function analyzeHeadlineSentiment(headline: string) {
 
     if (!output || !Array.isArray(output) || output.length === 0) {
       return {
-        label: 'neutral',
-        score: 0.5,
-        allScores: []
+        status: 'unavailable',
+        label: 'unavailable',
+        score: 0,
+        allScores: [],
+        error: 'Empty model output'
       };
     }
 
@@ -38,21 +63,27 @@ export async function analyzeHeadlineSentiment(headline: string) {
     const topResult = sorted[0];
 
     return {
-      label: topResult.label,
+      status: 'ok',
+      label: mapToDisplayLabel(topResult.label),
       score: topResult.score,
       allScores: sorted
     };
-  } catch (error) {
-    console.error("FinBERT Sentiment Analysis Error:", error);
+  } catch (error: any) {
+    console.error("FinBERT Sentiment Analysis Error:", error?.message || error);
     return {
-      label: 'neutral',
-      score: 0.5,
-      allScores: []
+      status: 'unavailable',
+      label: 'unavailable',
+      score: 0,
+      allScores: [],
+      error: error?.message || 'Inference failed'
     };
   }
 }
 
-export async function analyzeBulkSentiment(headlines: string[], maxBatchSize: number = 8) {
+export async function analyzeBulkSentiment(
+  headlines: string[],
+  maxBatchSize: number = 8
+): Promise<HeadlineSentimentResult[]> {
   if (!headlines || !Array.isArray(headlines) || headlines.length === 0) {
     return [];
   }
@@ -61,4 +92,3 @@ export async function analyzeBulkSentiment(headlines: string[], maxBatchSize: nu
   const results = await Promise.all(targetHeadlines.map(analyzeHeadlineSentiment));
   return results;
 }
-
