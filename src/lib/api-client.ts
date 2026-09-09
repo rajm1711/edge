@@ -5,6 +5,45 @@ export type ApiResponse<T> = {
   cached?: boolean;
 };
 
+// Strongly-typed AI response shapes
+export interface PreTradeEvaluation {
+  overallScore: number;
+  grade: 'A' | 'B' | 'C' | 'D' | 'F';
+  greenFlags: string[];
+  redFlags: string[];
+  missingResearch: string[];
+  suggestion: string;
+  verdict: 'proceed' | 'reconsider' | 'avoid';
+}
+
+export interface TradeAutopsyReport {
+  whatWentRight: string[];
+  whatWentWrong: string[];
+  emotionImpact: string;
+  thesisQuality: 'weak' | 'moderate' | 'strong';
+  thesisFeedback: string;
+  keyLesson: string;
+  doNextTime: string;
+  score: number;
+}
+
+export interface SentimentAnalysisResult {
+  articles: Array<{
+    headline: string;
+    sentiment: 'bullish' | 'bearish' | 'neutral';
+    score: number;
+  }>;
+  overallSentiment: string;
+  sentimentType: string;
+  overallScore: number;
+  summary: string;
+  topBuzzwords: string[];
+  bullishKeyDrivers: string[];
+  bearishKeyDrivers: string[];
+  analystOpinion: string;
+  tomorrowOutlook: string;
+}
+
 async function apiRequest<T>(url: string, options?: RequestInit): Promise<ApiResponse<T>> {
   try {
     const response = await fetch(url, options);
@@ -48,13 +87,13 @@ export const apiClient = {
   researchStockAI: (symbol: string, data: any) => 
     apiRequest<any>("/api/ai/research", { method: "POST", body: JSON.stringify({ symbol, data }) }),
   sentimentAI: (ticker: string, news: any[]) => 
-    apiRequest<any>("/api/ai/sentiment", { method: "POST", body: JSON.stringify({ ticker, news }) }),
+    apiRequest<SentimentAnalysisResult>("/api/ai/sentiment", { method: "POST", body: JSON.stringify({ ticker, news }) }),
   detectSignalsAI: (ticker: string) => 
     apiRequest<any>("/api/ai/signals", { method: "POST", body: JSON.stringify({ ticker }) }),
   preTrade: (body: any) => 
-    apiRequest<any>("/api/ai/pre-trade", { method: "POST", body: JSON.stringify(body) }),
+    apiRequest<PreTradeEvaluation>("/api/ai/pre-trade", { method: "POST", body: JSON.stringify(body) }),
   tradeAutopsyAI: (trade: any) => 
-    apiRequest<any>("/api/ai/trade-autopsy", { method: "POST", body: JSON.stringify({ trade }) }),
+    apiRequest<TradeAutopsyReport>("/api/ai/trade-autopsy", { method: "POST", body: JSON.stringify({ trade }) }),
   journalSummaryAI: (trades: any[]) => 
     apiRequest<any>("/api/ai/journal-summary", { method: "POST", body: JSON.stringify({ trades }) }),
   marketBiasAI: (body: any) => 
@@ -70,3 +109,4 @@ export const apiClient = {
   eventExplainerAI: (body: any) => 
     apiRequest<any>("/api/ai/event-explainer", { method: "POST", body: JSON.stringify(body) }),
 };
+
