@@ -21,24 +21,26 @@
 
 ```mermaid
 graph TD
-    Client[🖥️ Next.js Web App UI]
+    Client["🖥️ Next.js Web App UI"]
     
-    subgraph NextJS Gateway ["⚡ Next.js App Router (API Gateway)"]
+    subgraph Gateway ["⚡ Next.js App Router API Gateway"]
         API_AI["🤖 /api/ai/* (AI Microservices)"]
         API_MKT["📈 /api/market/* (Market Data API)"]
         Client_Lib["📦 Client API Utilities (api-client.ts)"]
     end
     
-    subgraph AI Processing Engine ["🧠 AI Intelligence Stack"]
+    subgraph AIEngine ["🧠 AI Intelligence Stack"]
         Groq["⚡ Groq API (Llama-3.3-70B-Versatile)"]
-        FinBERT["🤗 HuggingFace Inference API (ProsusAI/FinBERT)"]
+        FinBERT["🤗 HuggingFace FinBERT"]
     end
     
-    subgraph Market Infrastructure ["📊 Financial Data Services"]
+    subgraph MarketInfra ["📊 Financial Data Services"]
         Finnhub["📈 Finnhub REST API (Quotes, News, Earnings, Insiders)"]
     end
 
-    Client -->|User Interactions| NextJS Gateway
+    Client -->|User Request| Client_Lib
+    Client_Lib -->|Fetch AI Endpoint| API_AI
+    Client_Lib -->|Fetch Market Data| API_MKT
     API_AI -->|JSON Prompts| Groq
     API_AI -->|Text Classification| FinBERT
     API_MKT -->|Market Queries| Finnhub
