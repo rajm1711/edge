@@ -41,7 +41,7 @@ export function PreTradeChecklist({ ticker, price }: { ticker: string; price: nu
           <h3 className="font-bebas text-[18px] tracking-wide uppercase text-text-primary">Pre-Trade Risk Coach</h3>
         </div>
         {result && (
-          <Badge variant={result.verdict === "proceed" ? "buy" : "sell"} className="font-mono text-[11px]">
+          <Badge variant={result.verdict === "proceed" ? "bullish" : "bearish"} className="font-mono text-[11px]">
             {result.verdict}
           </Badge>
         )}
@@ -164,10 +164,16 @@ export function PreTradeChecklist({ ticker, price }: { ticker: string; price: nu
             >
               Reset & New Analysis
             </Button>
+
+            {/* Disclaimer Footer */}
+            <p className="text-[11px] text-[#4a5568] italic mt-3">
+              AI-generated analysis is for informational and educational purposes only. This is not financial advice or a recommendation to buy or sell securities.
+            </p>
           </div>
         )}
       </CardContent>
     </Card>
   );
 }
+
 

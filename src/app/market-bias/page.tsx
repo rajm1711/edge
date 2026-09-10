@@ -13,6 +13,8 @@ import { apiClient } from "@/lib/api-client";
 import { PageShell } from "@/components/layout/PageShell";
 import { cn } from "@/lib/utils";
 
+import { motion } from "framer-motion";
+
 export default function MarketBiasPage() {
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -107,7 +109,12 @@ export default function MarketBiasPage() {
 
   return (
     <PageShell>
-      <div className="w-full max-w-[1400px] mx-auto space-y-6 font-sans min-w-0">
+      <motion.div 
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35 }}
+        className="w-full max-w-[1400px] mx-auto space-y-6 font-sans min-w-0"
+      >
         {/* Header Strip */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
@@ -252,8 +259,16 @@ export default function MarketBiasPage() {
             </div>
           </div>
         </div>
-      </div>
+
+        {/* Disclaimer Footer */}
+        <p className="text-[11px] text-[#4a5568] italic mt-3">
+          AI-generated analysis is for informational and educational purposes only. This is not financial advice or a recommendation to buy or sell securities.
+        </p>
+      </motion.div>
     </PageShell>
   );
 }
+
+
+
 

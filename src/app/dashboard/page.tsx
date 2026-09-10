@@ -17,6 +17,8 @@ import Link from "next/link";
 
 const DEFAULT_WATCHLIST = "AAPL,NVDA,TSLA,MSFT,AMZN,META,GOOGL,AMD,NFLX,PLTR,COIN,JPM,V,WMT,DIS";
 
+import { motion } from "framer-motion";
+
 export default function DashboardPage() {
   const [indices, setIndices] = useState<any[]>([]);
   const [watchlist, setWatchlist] = useState<any[]>([]);
@@ -61,7 +63,12 @@ export default function DashboardPage() {
 
   return (
     <PageShell>
-      <div className="w-full max-w-[1600px] mx-auto space-y-6 font-sans min-w-0">
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35 }}
+        className="w-full max-w-[1600px] mx-auto space-y-6 font-sans min-w-0"
+      >
         {/* ROW 1: Market Pulse Strip (Static Horizontal Snapshot) */}
         <div className="rounded-[12px] border border-border bg-bg-card px-6 py-3">
           <div className="flex items-center justify-between overflow-x-auto gap-6 scrollbar-none">
@@ -232,7 +239,7 @@ export default function DashboardPage() {
                         <span className="font-mono font-medium text-[13px] text-text-primary uppercase">{entry.ticker}</span>
                         <span className="text-[10px] text-text-muted font-mono">{entry.date}</span>
                       </div>
-                      <Badge variant={entry.outcome === "Won" ? "buy" : "sell"} className="font-mono">
+                      <Badge variant={entry.outcome === "Won" ? "bullish" : "bearish"} className="font-mono">
                         {entry.pnlPercent >= 0 ? "+" : ""}{entry.pnlPercent?.toFixed(2)}%
                       </Badge>
                     </div>
@@ -294,8 +301,9 @@ export default function DashboardPage() {
             </div>
           </CardContent>
         </Card>
-      </div>
+      </motion.div>
     </PageShell>
   );
 }
+
 

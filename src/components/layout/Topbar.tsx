@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { usePathname, useRouter } from "next/navigation";
 import { apiClient } from "@/lib/api-client";
 import { cn, formatPercent } from "@/lib/utils";
+import { TickerBar } from "@/components/terminal/TickerBar";
 
 export function Topbar() {
   const { theme, setTheme } = useTheme();
@@ -57,34 +58,8 @@ export function Topbar() {
 
   return (
     <header className="sticky top-0 z-40 flex flex-col w-full max-w-full overflow-x-hidden bg-[var(--bg-primary)]">
-      {/* Ticker Tape Row (Height: 36px, Background: #040810) */}
-      <div className="flex h-[36px] w-full max-w-full items-center overflow-hidden bg-[#040810] border-b border-[#1a2540] px-4">
-        <div className="flex animate-marquee whitespace-nowrap gap-6 py-1 items-center">
-          {(indices.length > 0 ? indices : [
-            { symbol: "^GSPC", name: "S&P 500", price: 5812.40, change: 12.3, changePercent: 0.21 },
-            { symbol: "^IXIC", name: "NASDAQ", price: 18415.20, change: -45.1, changePercent: -0.24 },
-            { symbol: "^DJI", name: "DOW", price: 42110.50, change: 105.8, changePercent: 0.25 },
-            { symbol: "^VIX", name: "VIX", price: 15.42, change: -0.85, changePercent: -5.22 },
-            { symbol: "BTC-USD", name: "BTC", price: 68420.00, change: 1450.0, changePercent: 2.16 }
-          ]).concat(indices).map((item, i) => {
-            const isPos = item.change >= 0;
-            return (
-              <div key={i} className="flex items-center gap-2 font-mono text-[12px]">
-                <span className="text-[11px] text-[#4a5568] uppercase font-mono">
-                  {item.symbol?.replace('^', '') || item.name}
-                </span>
-                <span className="text-white font-medium font-mono">
-                  {typeof item.price === "number" ? item.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : item.price}
-                </span>
-                <span className={cn("font-mono text-[11px] font-medium", isPos ? "text-[#00d084]" : "text-[#ff4d4d]")}>
-                  {isPos ? "+" : ""}{formatPercent(item.changePercent)}
-                </span>
-                <span className="text-[#4a5568] ml-2">·</span>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      {/* Live Market Ticker Tape */}
+      <TickerBar />
 
       {/* Main Bar Row (Height: 68px, Border-bottom: 1px border) */}
       <div className="flex h-[68px] items-center justify-between px-6 border-b border-border bg-[var(--bg-primary)] max-w-full overflow-x-hidden">

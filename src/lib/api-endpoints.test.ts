@@ -35,55 +35,60 @@ describe('Serverless API Route Handlers Suite', () => {
     it('POST /api/ai/pre-trade should validate missing required parameters', async () => {
       const req = new NextRequest('http://localhost:3000/api/ai/pre-trade', {
         method: 'POST',
+        headers: { 'x-forwarded-for': 'test-ip-pre-trade' },
         body: JSON.stringify({}),
       });
       const res = await preTradeAI(req);
       expect(res.status).toBe(400);
       const json = await res.json();
       expect(json.success).toBe(false);
-      expect(json.error).toBe('Invalid input parameters');
+      expect(json.error.code).toBe('INVALID_INPUT');
     });
 
     it('POST /api/ai/trade-autopsy should validate missing trade ticker', async () => {
       const req = new NextRequest('http://localhost:3000/api/ai/trade-autopsy', {
         method: 'POST',
+        headers: { 'x-forwarded-for': 'test-ip-autopsy' },
         body: JSON.stringify({ trade: {} }),
       });
       const res = await tradeAutopsyAI(req);
       expect(res.status).toBe(400);
       const json = await res.json();
       expect(json.success).toBe(false);
-      expect(json.error).toBe('Invalid trade autopsy parameters');
+      expect(json.error.code).toBe('INVALID_INPUT');
     });
 
     it('POST /api/ai/research should validate missing stock parameters', async () => {
       const req = new NextRequest('http://localhost:3000/api/ai/research', {
         method: 'POST',
+        headers: { 'x-forwarded-for': 'test-ip-research' },
         body: JSON.stringify({}),
       });
       const res = await researchAI(req);
       expect(res.status).toBe(400);
       const json = await res.json();
       expect(json.success).toBe(false);
-      expect(json.error).toBe('Invalid stock research request parameters');
+      expect(json.error.code).toBe('INVALID_INPUT');
     });
 
     it('POST /api/ai/signals should validate missing ticker input', async () => {
       const req = new NextRequest('http://localhost:3000/api/ai/signals', {
         method: 'POST',
+        headers: { 'x-forwarded-for': 'test-ip-signals' },
         body: JSON.stringify({}),
       });
       const res = await signalsAI(req);
       expect(res.status).toBe(400);
       const json = await res.json();
       expect(json.success).toBe(false);
-      expect(json.error).toBe('Invalid request parameters');
+      expect(json.error.code).toBe('INVALID_INPUT');
     });
 
     it('POST /api/ai/sentiment should handle empty news array gracefully', async () => {
       const req = new NextRequest('http://localhost:3000/api/ai/sentiment', {
         method: 'POST',
-        body: JSON.stringify({ ticker: 'NVDA', news: [] }),
+        headers: { 'x-forwarded-for': 'test-ip-sentiment' },
+        body: JSON.stringify({ ticker: 'NVDA', headlines: [] }),
       });
       const res = await sentimentAI(req);
       expect(res.status).toBe(400);
@@ -92,3 +97,4 @@ describe('Serverless API Route Handlers Suite', () => {
     });
   });
 });
+

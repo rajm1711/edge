@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Plus, BookOpen, Trash2, Search, Filter, Sparkles, TrendingUp, TrendingDown, Clock, Brain, AlertCircle, X, ChevronRight, CheckCircle2, Loader2 } from "lucide-react";
+import { motion } from "framer-motion";
 import { PageShell } from "@/components/layout/PageShell";
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -135,7 +136,12 @@ export default function JournalPage() {
 
     return (
         <PageShell>
-            <div className="max-w-[1400px] mx-auto space-y-8 animate-in fade-in duration-700">
+            <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="max-w-[1400px] mx-auto space-y-8"
+            >
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
                     <div>
                         <h1 className="font-bebas text-5xl tracking-tight text-text-primary">Trade Journal</h1>
@@ -192,6 +198,9 @@ export default function JournalPage() {
                                     </ul>
                                 </div>
                             </div>
+                            <p className="text-[11px] text-[#4a5568] italic mt-3 border-t border-border/40 pt-2">
+                                AI-generated analysis is for informational and educational purposes only. This is not financial advice or a recommendation to buy or sell securities.
+                            </p>
                         </CardContent>
                         <div className="bg-bg-card/50 p-3 flex justify-end gap-2">
                             <Button variant="ghost" size="sm" onClick={() => setSummaryData(null)} className="text-[10px] uppercase font-bold tracking-widest text-text-muted">Dismiss</Button>
@@ -521,7 +530,7 @@ export default function JournalPage() {
                                             <p className="text-xs text-text-primary leading-relaxed">{autopsyData.lesson}</p>
                                         </div>
 
-                                        <Card variant="ai" className="bg-accent/5 border-accent/20">
+                                         <Card variant="ai" className="bg-accent/5 border-accent/20">
                                             <CardContent className="p-3">
                                                 <div className="flex items-center gap-3">
                                                     <div className="p-2 bg-accent rounded-lg text-bg-sidebar">
@@ -534,13 +543,19 @@ export default function JournalPage() {
                                                 </div>
                                             </CardContent>
                                         </Card>
+
+                                        {/* Disclaimer Footer */}
+                                        <p className="text-[11px] text-[#4a5568] italic mt-3">
+                                            AI-generated analysis is for informational and educational purposes only. This is not financial advice or a recommendation to buy or sell securities.
+                                        </p>
                                     </div>
                                 )}
                             </div>
                         </Card>
                     </div>
                 ) : null}
-            </div>
+
+            </motion.div>
         </PageShell>
     );
 }

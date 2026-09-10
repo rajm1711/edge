@@ -9,7 +9,8 @@ import {
   BookOpen, 
   BarChart2, 
   Calendar, 
-  Bell, 
+  Info,
+  Cpu,
   Settings
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -21,6 +22,8 @@ const NAV_ITEMS = [
   { name: "Journal", href: "/journal", icon: BookOpen },
   { name: "Market Bias", href: "/market-bias", icon: BarChart2 },
   { name: "Economic Calendar", href: "/calendar", icon: Calendar },
+  { name: "About", href: "/about", icon: Info },
+  { name: "Architecture", href: "/architecture", icon: Cpu },
 ];
 
 export function Sidebar() {
@@ -55,7 +58,7 @@ export function Sidebar() {
         </div>
 
         {/* Navigation Items */}
-        <nav className="flex-1 space-y-1 pr-3">
+        <nav className="flex-1 space-y-1 pr-3 overflow-y-auto">
           {NAV_ITEMS.map((item) => {
             const isActive = pathname === item.href || (item.href === "/dashboard" && pathname === "/");
             return (
@@ -63,7 +66,7 @@ export function Sidebar() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-3 px-4 py-2.5 text-xs transition-all duration-150 font-sans",
+                  "flex items-center gap-3 px-4 py-2 text-xs transition-all duration-150 font-sans",
                   isActive
                     ? "rounded-r-[8px] border-l-2 border-l-[#00d084] bg-[rgba(0,208,132,0.12)] text-white font-semibold"
                     : "rounded-[8px] ml-3 text-[#94a3b8] hover:bg-[rgba(255,255,255,0.06)] hover:text-white"
@@ -82,11 +85,11 @@ export function Sidebar() {
         </nav>
 
         {/* Bottom Section */}
-        <div className="mt-auto space-y-1.5 px-4 pt-4 border-t border-[rgba(255,255,255,0.08)]">
+        <div className="mt-auto space-y-1.5 px-4 pt-3 border-t border-[rgba(255,255,255,0.08)]">
           <Link
             href="/settings"
             className={cn(
-              "flex items-center gap-3 rounded-[8px] px-3 py-2 text-xs transition-colors font-sans",
+              "flex items-center gap-3 rounded-[8px] px-3 py-1.5 text-xs transition-colors font-sans",
               pathname === "/settings"
                 ? "bg-[rgba(255,255,255,0.08)] text-white font-medium"
                 : "text-[#94a3b8] hover:bg-[rgba(255,255,255,0.06)] hover:text-white"
@@ -97,17 +100,18 @@ export function Sidebar() {
           </Link>
 
           {/* User Card */}
-          <div className="flex items-center gap-3 rounded-[8px] bg-[rgba(255,255,255,0.06)] p-2.5 border border-[rgba(255,255,255,0.08)] mt-3">
-            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#00d084] text-xs font-bold text-black">
-              GS
+          <div className="flex items-center gap-3 rounded-[8px] bg-[rgba(255,255,255,0.06)] p-2.5 border border-[rgba(255,255,255,0.08)] mt-2">
+            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#00d084] text-xs font-bold text-black shrink-0">
+              RP
             </div>
             <div className="overflow-hidden">
-              <p className="text-[12px] font-medium text-white truncate leading-tight">Analyst Terminal</p>
-              <p className="text-[11px] text-[#94a3b8] truncate">Institutional Tier</p>
+              <p className="text-[12px] font-medium text-white truncate leading-tight">Raj Puthawala</p>
+              <p className="text-[10px] text-[#94a3b8] truncate">Personal Project</p>
             </div>
           </div>
         </div>
       </aside>
+
 
       {/* Mobile Bottom Tab Bar (64px height, #060a0f background) */}
       <nav className="fixed bottom-0 left-0 z-50 flex h-[64px] w-full items-center justify-around border-t border-[#1a2540] bg-[#060a0f] px-2 md:hidden">

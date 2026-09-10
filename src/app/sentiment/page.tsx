@@ -11,6 +11,8 @@ import { apiClient } from "@/lib/api-client";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { cn } from "@/lib/utils";
 
+import { motion } from "framer-motion";
+
 export default function SentimentPage() {
   const [ticker, setTicker] = useState("");
   const [inputValue, setInputValue] = useState("");
@@ -44,9 +46,14 @@ export default function SentimentPage() {
 
   return (
     <PageShell>
-      <div className="w-full max-w-[1400px] mx-auto space-y-6 font-sans min-w-0">
+      <motion.div 
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35 }}
+        className="w-full max-w-[1400px] mx-auto space-y-6 font-sans min-w-0"
+      >
         {/* Section 1 — Sticky Search Bar */}
-        <div className="rounded-[12px] border border-border bg-bg-card p-4 flex flex-col md:flex-row items-center gap-4 justify-between">
+        <div className="rounded-[12px] border border-border bg-bg-card/90 backdrop-blur-md p-4 flex flex-col md:flex-row items-center gap-4 justify-between">
           <div className="relative flex-1 w-full">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted" />
             <input
@@ -117,7 +124,7 @@ export default function SentimentPage() {
                       <span className="font-mono text-[9px] text-text-muted uppercase">BULLISH</span>
                     </div>
                   </div>
-                  <Badge variant={data.sentimentType === "bullish" ? "bullish" : "bearish"} className="mt-3">
+                  <Badge variant={data.sentimentType === "bullish" ? "bullish" : data.sentimentType === "bearish" ? "bearish" : data.sentimentType === "unavailable" ? "unavailable" : "neutral"} className="mt-3">
                     {data.sentimentType || "BULLISH"} INTENSITY
                   </Badge>
                 </Card>
@@ -226,11 +233,18 @@ export default function SentimentPage() {
                   </div>
                 </div>
               </div>
+
+              {/* Disclaimer Footer */}
+              <p className="text-[11px] text-[#4a5568] italic mt-3">
+                AI-generated analysis is for informational and educational purposes only. This is not financial advice or a recommendation to buy or sell securities.
+              </p>
             </div>
           )
         )}
-      </div>
+      </motion.div>
     </PageShell>
   );
 }
+
+
 
