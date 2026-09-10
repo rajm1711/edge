@@ -10,6 +10,14 @@ const RequestBodySchema = z.object({
   previous: z.union([z.number(), z.string()]).optional().default("N/A"),
 });
 
+const EventExplainerResponseSchema = z.object({
+  whatIsIt: z.string().default("Economic catalyst event tracking interest rates, inflation, or macro economic activity."),
+  whyItMatters: z.string().default("Central bank rate decisions and macroeconomic indicators directly influence currency valuations, bond yields, and broad market volatility."),
+  marketImpact: z.enum(["bullish", "bearish", "neutral"]).catch("neutral"),
+  affectedSectors: z.array(z.string()).default(["Banking", "Forex", "Bonds"]),
+  tradingImplication: z.string().default("Monitor rate differentials and central bank statement tone for multi-week directional bias."),
+});
+
 export async function POST(request: NextRequest) {
   try {
     const identifier = request.headers.get("x-forwarded-for") ?? "anonymous";
@@ -57,13 +65,15 @@ Actual: ${actual} | Estimate: ${estimate} | Previous: ${previous}
 
 Explain this economic indicator event in simple terms for educational context.
 Return only valid JSON matching this exact structure:
-- "whatIsIt": string (1 sentence definition)
-- "whyItMatters": string (2 sentences why market participants track this)
-- "marketImpact": "bullish" | "bearish" | "neutral"
-- "affectedSectors": array of up to 3 string sector names
-- "tradingImplication": string (1 sentence educational observation note)`;
+{
+  "whatIsIt": "1 sentence definition",
+  "whyItMatters": "2 sentences why market participants track this",
+  "marketImpact": "bullish" | "bearish" | "neutral",
+  "affectedSectors": ["Sector 1", "Sector 2"],
+  "tradingImplication": "1 sentence educational observation note"
+}`;
 
-    const data = await callGroq(prompt, { maxTokens: 800, temperature: 0.3 });
+    const data = await callGroq(prompt, { schema: EventExplainerResponseSchema, maxTokens: 800, temperature: 0.3 });
     return NextResponse.json({ success: true, data });
   } catch (error: any) {
     console.error("AI Event Explainer Error:", error);

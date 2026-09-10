@@ -25,33 +25,32 @@ interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
 }
 
 export function Badge({ children, className, variant = "default", ...props }: BadgeProps) {
-  const variants = {
-    default: "bg-bg-secondary text-text-primary border border-border",
-    "strongly-bullish": "bg-[#00d084] text-black font-medium",
-    bullish: "bg-[rgba(0,208,132,0.15)] text-[#00d084] border border-[#00d084]",
-    neutral: "bg-[rgba(245,166,35,0.15)] text-[#f5a623] border border-[#f5a623]",
-    bearish: "bg-[rgba(255,77,77,0.15)] text-[#ff4d4d] border border-[#ff4d4d]",
-    "strongly-bearish": "bg-[#ff4d4d] text-white font-medium",
-    buy: "bg-[rgba(0,208,132,0.15)] text-[#00d084] border border-[#00d084]",
-    sell: "bg-[rgba(255,77,77,0.15)] text-[#ff4d4d] border border-[#ff4d4d]",
-    hold: "bg-[rgba(245,166,35,0.15)] text-[#f5a623] border border-[#f5a623]",
-    unavailable: "bg-[rgba(113,128,150,0.12)] text-[#718096]",
-    ai: "bg-ai-purple-dim text-ai-purple",
-    success: "bg-positive/10 text-positive",
-    danger: "bg-negative/10 text-negative",
-    warning: "bg-neutral/10 text-neutral",
-    info: "bg-info/10 text-info",
-    high: "bg-[rgba(255,77,77,0.12)] text-[#ff4d4d]",
-    medium: "bg-[rgba(245,166,35,0.12)] text-[#f5a623]",
-    low: "bg-[rgba(113,128,150,0.12)] text-[#718096]",
-    outline: "bg-transparent border border-border text-text-secondary",
+  const variants: Record<string, string> = {
+    default: "bg-[var(--background-secondary)] text-[var(--foreground)] border border-[var(--border)]",
+    "strongly-bullish": "bg-[#00d084] text-black font-medium border border-[#00d084]",
+    bullish: "bg-[rgba(0,208,132,0.12)] text-[#00d084] border border-[rgba(0,208,132,0.20)]",
+    neutral: "bg-[rgba(245,158,11,0.12)] text-[#f59e0b] border border-[rgba(245,158,11,0.20)]",
+    bearish: "bg-[rgba(239,68,68,0.12)] text-[#ef4444] border border-[rgba(239,68,68,0.20)]",
+    "strongly-bearish": "bg-[#ef4444] text-white font-medium border border-[#ef4444]",
+    buy: "bg-[rgba(0,208,132,0.12)] text-[#00d084] border border-[rgba(0,208,132,0.20)]",
+    sell: "bg-[rgba(239,68,68,0.12)] text-[#ef4444] border border-[rgba(239,68,68,0.20)]",
+    hold: "bg-[rgba(245,158,11,0.12)] text-[#f59e0b] border border-[rgba(245,158,11,0.20)]",
+    unavailable: "bg-[rgba(71,85,105,0.12)] text-[#475569] border border-[rgba(71,85,105,0.20)]",
+    ai: "bg-[rgba(167,139,250,0.08)] text-[#a78bfa] border border-[rgba(167,139,250,0.20)]",
+    success: "bg-[rgba(0,208,132,0.12)] text-[#00d084] border border-[rgba(0,208,132,0.20)]",
+    danger: "bg-[rgba(239,68,68,0.12)] text-[#ef4444] border border-[rgba(239,68,68,0.20)]",
+    warning: "bg-[rgba(245,158,11,0.12)] text-[#f59e0b] border border-[rgba(245,158,11,0.20)]",
+    info: "bg-[rgba(59,130,246,0.12)] text-[#3b82f6] border border-[rgba(59,130,246,0.20)]",
+    high: "bg-[rgba(239,68,68,0.12)] text-[#ef4444] border border-[rgba(239,68,68,0.20)]",
+    medium: "bg-[rgba(245,158,11,0.12)] text-[#f59e0b] border border-[rgba(245,158,11,0.20)]",
+    low: "bg-[rgba(71,85,105,0.12)] text-[#475569] border border-[rgba(71,85,105,0.20)]",
+    outline: "bg-transparent border border-[var(--border)] text-[var(--foreground-secondary)]",
   };
-
 
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-[4px] px-2 py-0.5 text-[11px] font-mono uppercase tracking-wide transition-colors",
+        "inline-flex items-center rounded-[6px] px-2 py-0.5 text-[11px] font-mono uppercase tracking-wide font-medium transition-colors",
         variants[variant] || variants.default,
         className
       )}
@@ -61,5 +60,3 @@ export function Badge({ children, className, variant = "default", ...props }: Ba
     </span>
   );
 }
-
-

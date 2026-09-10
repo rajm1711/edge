@@ -72,21 +72,21 @@ export function OrderBookDepth({ currentPrice = 138.25, ticker = "NVDA" }: Order
   }, [currentPrice, precision]);
 
   return (
-    <div className="w-full rounded-2xl border border-[#1a2540] bg-[#0d1421]/95 backdrop-blur-md overflow-hidden flex flex-col font-mono text-xs tabular-nums shadow-xl">
+    <div className="w-full rounded-[16px] border border-[var(--border)] bg-[var(--card)] overflow-hidden flex flex-col font-mono text-xs tabular-nums shadow-sm">
       {/* Header Bar */}
-      <div className="flex items-center justify-between p-3.5 border-b border-[#1a2540] bg-[#090f19]">
+      <div className="flex items-center justify-between p-3.5 border-b border-[var(--border)] bg-[var(--background-secondary)]">
         <div className="flex items-center gap-2">
-          <Layers className="h-4 w-4 text-[#00d084]" />
-          <span className="font-bebas text-lg tracking-wide uppercase text-text-primary">Order Book Depth</span>
+          <Layers className="h-4 w-4 text-[var(--accent)]" />
+          <span className="font-sans text-sm font-semibold tracking-wider uppercase text-[var(--foreground)]">Order Book Depth</span>
         </div>
         <div className="flex items-center gap-1.5 text-[10px]">
-          <span className="text-[#4a5568] uppercase font-bold">Tick Size</span>
-          <div className="flex bg-bg-primary rounded p-0.5 border border-border">
+          <span className="text-[var(--foreground-muted)] uppercase font-mono">Tick Size</span>
+          <div className="flex bg-[var(--background-tertiary)] rounded-[4px] p-0.5 border border-[var(--border)]">
             {([0.01, 0.1, 1] as const).map(p => (
               <button
                 key={p}
                 onClick={() => setPrecision(p)}
-                className={cn("px-1.5 py-0.5 rounded text-[10px] font-bold transition-all", precision === p ? "bg-[#00d084] text-black" : "text-text-muted")}
+                className={cn("px-1.5 py-0.5 rounded-[3px] text-[10px] font-bold transition-all", precision === p ? "bg-[var(--accent)] text-black" : "text-[var(--foreground-muted)]")}
               >
                 {p}
               </button>
@@ -96,67 +96,67 @@ export function OrderBookDepth({ currentPrice = 138.25, ticker = "NVDA" }: Order
       </div>
 
       {/* Buy/Sell Pressure Ratio Meter */}
-      <div className="px-3.5 py-2 border-b border-[#1a2540] bg-[#070b12]">
+      <div className="px-3.5 py-2 border-b border-[var(--border)] bg-[var(--background-secondary)]/50">
         <div className="flex justify-between items-center text-[10px] font-bold mb-1">
-          <span className="text-[#00d084] flex items-center gap-1">
+          <span className="text-[var(--positive)] flex items-center gap-1">
             <ArrowUp className="h-3 w-3" /> Bids {bidRatio}%
           </span>
-          <span className="text-[#ff4d4d] flex items-center gap-1">
+          <span className="text-[var(--negative)] flex items-center gap-1">
             Asks {askRatio}% <ArrowDown className="h-3 w-3" />
           </span>
         </div>
-        <div className="h-1.5 w-full bg-[#1a2540] rounded-full overflow-hidden flex">
-          <div className="h-full bg-[#00d084] transition-all duration-500" style={{ width: `${bidRatio}%` }} />
-          <div className="h-full bg-[#ff4d4d] transition-all duration-500" style={{ width: `${askRatio}%` }} />
+        <div className="h-1.5 w-full bg-[var(--border)] rounded-full overflow-hidden flex">
+          <div className="h-full bg-[var(--positive)] transition-all duration-500" style={{ width: `${bidRatio}%` }} />
+          <div className="h-full bg-[var(--negative)] transition-all duration-500" style={{ width: `${askRatio}%` }} />
         </div>
       </div>
 
       {/* Columns Header */}
-      <div className="grid grid-cols-3 px-3.5 py-1.5 text-[10px] font-bold text-[#4a5568] uppercase border-b border-[#1a2540] bg-[#060a10]">
+      <div className="grid grid-cols-3 px-3.5 py-1.5 text-[10px] font-bold text-[var(--foreground-muted)] uppercase border-b border-[var(--border)] bg-[var(--background-tertiary)]">
         <span>Price (USD)</span>
         <span className="text-right">Size</span>
         <span className="text-right">Total</span>
       </div>
 
       {/* Asks Section (Red - Selling orders) */}
-      <div className="flex flex-col space-y-0.5 py-1 bg-[#0a0f18]/40">
+      <div className="flex flex-col space-y-0.5 py-1">
         {asks.map((row, i) => (
-          <div key={i} className="relative grid grid-cols-3 px-3.5 py-0.5 text-[11px] items-center hover:bg-white/5 transition-colors">
+          <div key={i} className="relative grid grid-cols-3 px-3.5 py-0.5 text-[11px] items-center hover:bg-[var(--background-secondary)] transition-colors">
             {/* Red Depth Fill Bar */}
             <div
-              className="absolute right-0 top-0 bottom-0 bg-[#ff4d4d]/15 pointer-events-none transition-all duration-300"
+              className="absolute right-0 top-0 bottom-0 bg-[var(--negative)]/15 pointer-events-none transition-all duration-300"
               style={{ width: `${row.depthPct}%` }}
             />
-            <span className="font-bold text-[#ff4d4d] relative z-10">{row.price.toFixed(2)}</span>
-            <span className="text-right text-text-secondary relative z-10">{row.size.toLocaleString()}</span>
-            <span className="text-right text-text-muted relative z-10">{row.total.toLocaleString()}</span>
+            <span className="font-bold text-[var(--negative)] relative z-10">{row.price.toFixed(2)}</span>
+            <span className="text-right text-[var(--foreground)] relative z-10">{row.size.toLocaleString()}</span>
+            <span className="text-right text-[var(--foreground-muted)] relative z-10">{row.total.toLocaleString()}</span>
           </div>
         ))}
       </div>
 
       {/* Current Spread Ticker Banner */}
-      <div className="flex items-center justify-between px-3.5 py-2 my-0.5 bg-[#090f19] border-y border-[#1a2540]">
+      <div className="flex items-center justify-between px-3.5 py-2 my-0.5 bg-[var(--background-secondary)] border-y border-[var(--border)]">
         <div className="flex items-center gap-2">
-          <span className="text-base font-bold text-text-primary">{formatCurrency(currentPrice)}</span>
-          <span className="text-[10px] text-[#00d084] font-bold uppercase tracking-wider">● LIVE</span>
+          <span className="text-base font-bold text-[var(--foreground)]">{formatCurrency(currentPrice)}</span>
+          <span className="text-[10px] text-[var(--positive)] font-bold uppercase tracking-wider">● LIVE</span>
         </div>
-        <div className="text-[10px] text-text-muted font-bold">
-          Spread: <span className="text-text-primary">{spread}</span> ({spreadPercent}%)
+        <div className="text-[10px] text-[var(--foreground-muted)] font-bold">
+          Spread: <span className="text-[var(--foreground)]">{spread}</span> ({spreadPercent}%)
         </div>
       </div>
 
       {/* Bids Section (Green - Buying orders) */}
-      <div className="flex flex-col space-y-0.5 py-1 bg-[#0a0f18]/40">
+      <div className="flex flex-col space-y-0.5 py-1">
         {bids.map((row, i) => (
-          <div key={i} className="relative grid grid-cols-3 px-3.5 py-0.5 text-[11px] items-center hover:bg-white/5 transition-colors">
+          <div key={i} className="relative grid grid-cols-3 px-3.5 py-0.5 text-[11px] items-center hover:bg-[var(--background-secondary)] transition-colors">
             {/* Green Depth Fill Bar */}
             <div
-              className="absolute right-0 top-0 bottom-0 bg-[#00d084]/15 pointer-events-none transition-all duration-300"
+              className="absolute right-0 top-0 bottom-0 bg-[var(--positive)]/15 pointer-events-none transition-all duration-300"
               style={{ width: `${row.depthPct}%` }}
             />
-            <span className="font-bold text-[#00d084] relative z-10">{row.price.toFixed(2)}</span>
-            <span className="text-right text-text-secondary relative z-10">{row.size.toLocaleString()}</span>
-            <span className="text-right text-text-muted relative z-10">{row.total.toLocaleString()}</span>
+            <span className="font-bold text-[var(--positive)] relative z-10">{row.price.toFixed(2)}</span>
+            <span className="text-right text-[var(--foreground)] relative z-10">{row.size.toLocaleString()}</span>
+            <span className="text-right text-[var(--foreground-muted)] relative z-10">{row.total.toLocaleString()}</span>
           </div>
         ))}
       </div>

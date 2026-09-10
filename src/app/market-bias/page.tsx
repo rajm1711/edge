@@ -118,17 +118,17 @@ export default function MarketBiasPage() {
         {/* Header Strip */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <span className="font-mono text-[10px] text-ai-purple uppercase tracking-wider">MACRO REASONING ENGINE</span>
-            <h1 className="font-bebas text-[28px] tracking-wide uppercase text-text-primary">Global Market Bias Terminal</h1>
+            <span className="font-mono text-[10px] text-[var(--ai)] uppercase tracking-wider">MACRO REASONING ENGINE</span>
+            <h1 className="font-sans text-2xl font-bold uppercase tracking-tight text-[var(--foreground)]">Global Market Bias Terminal</h1>
           </div>
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 rounded-[8px] bg-bg-card border border-border px-3 py-1.5 font-mono text-[11px]">
-              <span className="text-text-muted">Refreshes in</span>
-              <span className="text-positive font-medium">{timeRemaining}</span>
+            <div className="flex items-center gap-2 rounded-[8px] bg-[var(--card)] border border-[var(--border)] px-3 py-1.5 font-mono text-[11px]">
+              <span className="text-[var(--foreground-muted)]">Refreshes in</span>
+              <span className="text-[var(--positive)] font-medium">{timeRemaining}</span>
             </div>
             <button
               onClick={fetchBias}
-              className="flex h-[34px] w-[34px] items-center justify-center rounded-[8px] border border-border bg-bg-card text-text-secondary hover:text-text-primary transition-colors"
+              className="flex h-[34px] w-[34px] items-center justify-center rounded-[8px] border border-[var(--border)] bg-[var(--card)] text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors"
               title="Refresh analysis"
             >
               <RefreshCw className={cn("h-4 w-4", isLoading && "animate-spin")} />
@@ -137,14 +137,14 @@ export default function MarketBiasPage() {
         </div>
 
         {/* HERO SECTION: Big Market Bias Banner */}
-        <div className="rounded-[12px] border-l-[3px] border-l-ai-purple border-y border-r border-border bg-bg-card p-8 space-y-6">
+        <div className="rounded-[16px] border-l-[3px] border-l-[var(--ai)] border-y border-r border-[var(--border)] bg-[var(--card)] p-8 space-y-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div>
-              <span className="font-mono text-[11px] text-text-muted uppercase">Consensus Synthesis Bias</span>
+              <span className="font-mono text-[11px] text-[var(--foreground-muted)] uppercase">Consensus Synthesis Bias</span>
               <h2
                 className={cn(
-                  "font-bebas text-[56px] tracking-tight leading-none uppercase mt-1",
-                  isBullish ? "text-positive" : isBearish ? "text-negative" : "text-neutral"
+                  "font-bebas text-[64px] tracking-tight leading-none uppercase mt-1",
+                  isBullish ? "text-[var(--positive)]" : isBearish ? "text-[var(--negative)]" : "text-[var(--warning)]"
                 )}
               >
                 {biasStr}
@@ -152,12 +152,12 @@ export default function MarketBiasPage() {
             </div>
             <div className="flex flex-col items-start md:items-end w-full md:w-auto">
               <div className="flex justify-between md:justify-end gap-3 font-mono text-[12px] mb-2 w-full md:w-auto">
-                <span className="text-text-muted">Confidence Level</span>
-                <span className="text-positive font-medium">{currentData.confidenceScore}%</span>
+                <span className="text-[var(--foreground-muted)]">Confidence Level</span>
+                <span className="text-[var(--positive)] font-medium">{currentData.confidenceScore}%</span>
               </div>
-              <div className="w-full md:w-64 h-2 bg-border rounded-full overflow-hidden">
+              <div className="w-full md:w-64 h-2 bg-[var(--border)] rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-positive transition-all duration-1000"
+                  className="h-full bg-[var(--positive)] transition-all duration-1000"
                   style={{ width: `${currentData.confidenceScore}%` }}
                 />
               </div>
@@ -165,15 +165,15 @@ export default function MarketBiasPage() {
           </div>
 
           {/* Reasoning Bullets (2-Column Grid) */}
-          <div className="pt-6 border-t border-border">
-            <h4 className="font-sans text-[11px] font-medium uppercase tracking-[0.08em] text-text-muted mb-4 flex items-center gap-1.5">
-              <Target className="h-3.5 w-3.5 text-positive" /> Primary Catalyst Reasoning
+          <div className="pt-6 border-t border-[var(--border)]">
+            <h4 className="font-sans text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--foreground-muted)] mb-4 flex items-center gap-1.5">
+              <Target className="h-3.5 w-3.5 text-[var(--positive)]" /> Primary Catalyst Reasoning
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {currentData.reasoning?.map((reason: string, i: number) => (
-                <div key={i} className="flex items-start gap-2.5 bg-bg-secondary p-3.5 rounded-[8px] border border-border">
-                  <span className="h-1.5 w-1.5 rounded-full bg-positive shrink-0 mt-1.5" />
-                  <p className="text-[12px] text-text-secondary leading-relaxed">{reason}</p>
+                <div key={i} className="flex items-start gap-2.5 bg-[var(--background-secondary)] p-3.5 rounded-[8px] border border-[var(--border)]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[var(--positive)] shrink-0 mt-1.5" />
+                  <p className="text-[12px] text-[var(--foreground-muted)] leading-relaxed">{reason}</p>
                 </div>
               ))}
             </div>
@@ -183,9 +183,9 @@ export default function MarketBiasPage() {
         {/* TWO-COLUMN SECTION */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* LEFT: Sector Bias Grid */}
-          <Card variant="terminal">
-            <CardHeader className="py-3 border-b border-border">
-              <h3 className="font-bebas text-[18px] tracking-wide uppercase text-text-primary">Sector Breakdown & Alignment</h3>
+          <Card variant="terminal" className="rounded-[16px]">
+            <CardHeader className="py-3.5 border-b border-[var(--border)]">
+              <h3 className="font-sans text-sm font-semibold uppercase tracking-wider text-[var(--foreground)]">Sector Breakdown & Alignment</h3>
             </CardHeader>
             <CardContent className="p-4 space-y-3">
               {currentData.sectorBias?.map((sec: any, i: number) => {
@@ -193,23 +193,23 @@ export default function MarketBiasPage() {
                 const isSecBull = b === "BULLISH";
                 const isSecBear = b === "BEARISH";
                 return (
-                  <div key={i} className="rounded-[8px] bg-bg-secondary border border-border p-3 space-y-1.5">
+                  <div key={i} className="rounded-[10px] bg-[var(--background-secondary)] border border-[var(--border)] p-3 space-y-1.5">
                     <div className="flex justify-between items-center">
-                      <span className="font-mono text-[13px] font-medium text-text-primary">{sec.sector}</span>
+                      <span className="font-mono text-[13px] font-medium text-[var(--foreground)]">{sec.sector}</span>
                       <Badge variant={isSecBull ? "bullish" : isSecBear ? "bearish" : "neutral"}>
                         {b}
                       </Badge>
                     </div>
                     {/* Mini Bar */}
-                    <div className="h-1 w-full bg-border rounded-full overflow-hidden">
+                    <div className="h-1 w-full bg-[var(--border)] rounded-full overflow-hidden">
                       <div
                         className={cn(
                           "h-full",
-                          isSecBull ? "bg-positive w-3/4" : isSecBear ? "bg-negative w-1/4" : "bg-neutral w-1/2"
+                          isSecBull ? "bg-[var(--positive)] w-3/4" : isSecBear ? "bg-[var(--negative)] w-1/4" : "bg-[var(--warning)] w-1/2"
                         )}
                       />
                     </div>
-                    <p className="text-[11px] text-text-secondary leading-normal">{sec.reason}</p>
+                    <p className="text-[11px] text-[var(--foreground-muted)] leading-normal">{sec.reason}</p>
                   </div>
                 );
               })}
@@ -219,15 +219,15 @@ export default function MarketBiasPage() {
           {/* RIGHT: Key Opportunities & Risks */}
           <div className="space-y-6">
             {/* Key Opportunities */}
-            <Card variant="terminal">
-              <CardHeader className="py-3 border-b border-border flex items-center gap-2">
-                <TrendingUp className="h-4 w-4 text-positive" />
-                <h3 className="font-bebas text-[18px] tracking-wide uppercase text-text-primary">Key Opportunities Today</h3>
+            <Card variant="terminal" className="rounded-[16px]">
+              <CardHeader className="py-3.5 border-b border-[var(--border)] flex items-center gap-2">
+                <TrendingUp className="h-4 w-4 text-[var(--positive)]" />
+                <h3 className="font-sans text-sm font-semibold uppercase tracking-wider text-[var(--foreground)]">Key Opportunities Today</h3>
               </CardHeader>
               <CardContent className="p-4 space-y-2.5">
                 {currentData.keyOpportunitiesToday?.map((opp: string, i: number) => (
-                  <div key={i} className="flex items-start gap-2.5 text-[12px] text-text-primary bg-[rgba(0,208,132,0.04)] p-3 rounded-[6px] border border-[rgba(0,208,132,0.15)]">
-                    <CheckCircle2 className="h-4 w-4 text-positive shrink-0 mt-0.5" />
+                  <div key={i} className="flex items-start gap-2.5 text-[12px] text-[var(--foreground)] bg-[var(--positive)]/5 p-3 rounded-[8px] border border-[var(--positive)]/20">
+                    <CheckCircle2 className="h-4 w-4 text-[var(--positive)] shrink-0 mt-0.5" />
                     <span>{opp}</span>
                   </div>
                 ))}
@@ -235,15 +235,15 @@ export default function MarketBiasPage() {
             </Card>
 
             {/* Key Risks */}
-            <Card variant="terminal">
-              <CardHeader className="py-3 border-b border-border flex items-center gap-2">
-                <AlertTriangle className="h-4 w-4 text-negative" />
-                <h3 className="font-bebas text-[18px] tracking-wide uppercase text-text-primary">Key Risks & Vulnerabilities</h3>
+            <Card variant="terminal" className="rounded-[16px]">
+              <CardHeader className="py-3.5 border-b border-[var(--border)] flex items-center gap-2">
+                <AlertTriangle className="h-4 w-4 text-[var(--negative)]" />
+                <h3 className="font-sans text-sm font-semibold uppercase tracking-wider text-[var(--foreground)]">Key Risks & Vulnerabilities</h3>
               </CardHeader>
               <CardContent className="p-4 space-y-2.5">
                 {currentData.keyRisksToday?.map((risk: string, i: number) => (
-                  <div key={i} className="flex items-start gap-2.5 text-[12px] text-text-primary bg-[rgba(255,77,77,0.04)] p-3 rounded-[6px] border border-[rgba(255,77,77,0.15)]">
-                    <AlertTriangle className="h-4 w-4 text-negative shrink-0 mt-0.5" />
+                  <div key={i} className="flex items-start gap-2.5 text-[12px] text-[var(--foreground)] bg-[var(--negative)]/5 p-3 rounded-[8px] border border-[var(--negative)]/20">
+                    <AlertTriangle className="h-4 w-4 text-[var(--negative)] shrink-0 mt-0.5" />
                     <span>{risk}</span>
                   </div>
                 ))}
@@ -251,17 +251,16 @@ export default function MarketBiasPage() {
             </Card>
 
             {/* Tomorrow's Outlook */}
-            <div className="rounded-[12px] bg-bg-card border border-border p-5">
-              <span className="font-sans text-[11px] font-medium uppercase tracking-[0.08em] text-ai-purple block mb-1">
+            <div className="rounded-[16px] bg-[var(--card)] border border-[var(--border)] p-5 space-y-1">
+              <span className="font-sans text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--ai)] block">
                 Tomorrow&apos;s Outlook & Playbook
               </span>
-              <p className="text-[13px] text-text-primary leading-relaxed font-sans">{currentData.tomorrowOutlook}</p>
+              <p className="text-[13px] text-[var(--foreground)] leading-relaxed font-sans">{currentData.tomorrowOutlook}</p>
             </div>
           </div>
         </div>
 
-        {/* Disclaimer Footer */}
-        <p className="text-[11px] text-[#4a5568] italic mt-3">
+        <p className="text-[11px] text-[var(--foreground-muted)] italic mt-2">
           AI-generated analysis is for informational and educational purposes only. This is not financial advice or a recommendation to buy or sell securities.
         </p>
       </motion.div>

@@ -93,57 +93,57 @@ export function TradingViewTerminalChart({
   const isPositive = change >= 0;
 
   return (
-    <div className="w-full rounded-2xl border border-[#1a2540] bg-[#0d1421]/95 backdrop-blur-md overflow-hidden shadow-2xl flex flex-col">
+    <div className="w-full rounded-[16px] border border-[var(--border)] bg-[var(--card)] overflow-hidden shadow-sm flex flex-col font-sans">
       {/* Header Bar: Symbol Info & Metrics */}
-      <div className="flex flex-wrap items-center justify-between gap-4 p-4 border-b border-[#1a2540] bg-[#090f19]">
+      <div className="flex flex-wrap items-center justify-between gap-4 p-4 border-b border-[var(--border)] bg-[var(--background-secondary)]">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <span className="font-mono font-bold text-xl text-text-primary tracking-tight uppercase">{ticker}</span>
-            <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-bg-secondary text-text-muted border border-border">
+            <span className="font-mono font-bold text-xl text-[var(--foreground)] tracking-tight uppercase">{ticker}</span>
+            <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-[4px] bg-[var(--background-tertiary)] text-[var(--foreground-muted)] border border-[var(--border)]">
               US EQUITIES
             </span>
           </div>
 
           <div className="flex items-baseline gap-2 font-mono tabular-nums">
-            <span className="text-2xl font-bold text-text-primary">{formatCurrency(currentPrice)}</span>
-            <span className={cn("text-xs font-bold px-2 py-0.5 rounded", isPositive ? "bg-[#00d084]/10 text-[#00d084]" : "bg-[#ff4d4d]/10 text-[#ff4d4d]")}>
+            <span className="text-2xl font-bold text-[var(--foreground)]">{formatCurrency(currentPrice)}</span>
+            <span className={cn("text-xs font-bold px-2 py-0.5 rounded-[4px]", isPositive ? "bg-[var(--positive)]/10 text-[var(--positive)]" : "bg-[var(--negative)]/10 text-[var(--negative)]")}>
               {isPositive ? "+" : ""}{formatCurrency(change)} ({isPositive ? "+" : ""}{formatPercent(changePercent)})
             </span>
           </div>
         </div>
 
         {/* Quick Metrics Bar */}
-        <div className="flex items-center gap-6 text-[11px] font-mono tabular-nums text-text-muted">
+        <div className="flex items-center gap-6 text-[11px] font-mono tabular-nums text-[var(--foreground-muted)]">
           <div>
-            <span className="text-[10px] uppercase font-bold tracking-widest text-[#4a5568] block">24h High</span>
-            <span className="text-text-primary font-bold">{formatCurrency(high24h)}</span>
+            <span className="text-[10px] uppercase font-mono tracking-wider text-[var(--foreground-muted)] block">24h High</span>
+            <span className="text-[var(--foreground)] font-bold">{formatCurrency(high24h)}</span>
           </div>
-          <div className="w-px h-6 bg-border" />
+          <div className="w-px h-6 bg-[var(--border)]" />
           <div>
-            <span className="text-[10px] uppercase font-bold tracking-widest text-[#4a5568] block">24h Low</span>
-            <span className="text-text-primary font-bold">{formatCurrency(low24h)}</span>
+            <span className="text-[10px] uppercase font-mono tracking-wider text-[var(--foreground-muted)] block">24h Low</span>
+            <span className="text-[var(--foreground)] font-bold">{formatCurrency(low24h)}</span>
           </div>
-          <div className="w-px h-6 bg-border" />
+          <div className="w-px h-6 bg-[var(--border)]" />
           <div>
-            <span className="text-[10px] uppercase font-bold tracking-widest text-[#4a5568] block">24h Volume</span>
-            <span className="text-text-primary font-bold">{volume24h}</span>
+            <span className="text-[10px] uppercase font-mono tracking-wider text-[var(--foreground-muted)] block">24h Volume</span>
+            <span className="text-[var(--foreground)] font-bold">{volume24h}</span>
           </div>
         </div>
       </div>
 
       {/* Control Toolbar: Timeframes & Technical Overlays */}
-      <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-2 bg-[#090e18] border-b border-[#1a2540] text-xs">
+      <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-2 bg-[var(--background-secondary)]/50 border-b border-[var(--border)] text-xs">
         {/* Timeframe Selector */}
-        <div className="flex items-center gap-1 bg-bg-primary p-1 rounded-lg border border-border">
+        <div className="flex items-center gap-1 bg-[var(--background-tertiary)] p-1 rounded-[8px] border border-[var(--border)]">
           {(["1D", "1W", "1M", "1Y", "ALL"] as const).map((tf) => (
             <button
               key={tf}
               onClick={() => setTimeframe(tf)}
               className={cn(
-                "px-3 py-1 rounded-md text-[11px] font-mono font-bold transition-all",
+                "px-3 py-1 rounded-[6px] text-[11px] font-mono font-bold transition-all",
                 timeframe === tf
-                  ? "bg-[#00d084] text-black shadow"
-                  : "text-text-muted hover:text-text-primary hover:bg-bg-secondary"
+                  ? "bg-[var(--accent)] text-black shadow-sm"
+                  : "text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:bg-[var(--background-secondary)]"
               )}
             >
               {tf}
@@ -153,44 +153,44 @@ export function TradingViewTerminalChart({
 
         {/* Chart Type Toggles */}
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1 bg-bg-primary p-1 rounded-lg border border-border">
+          <div className="flex items-center gap-1 bg-[var(--background-tertiary)] p-1 rounded-[8px] border border-[var(--border)]">
             <button
               onClick={() => setChartType("area")}
-              className={cn("px-2.5 py-1 rounded text-[11px] font-mono font-bold transition-all", chartType === "area" ? "bg-accent/20 text-accent" : "text-text-muted")}
+              className={cn("px-2.5 py-1 rounded-[6px] text-[11px] font-mono font-bold transition-all", chartType === "area" ? "bg-[var(--accent)]/20 text-[var(--accent)]" : "text-[var(--foreground-muted)]")}
             >
               Area
             </button>
             <button
               onClick={() => setChartType("candlestick")}
-              className={cn("px-2.5 py-1 rounded text-[11px] font-mono font-bold transition-all", chartType === "candlestick" ? "bg-accent/20 text-accent" : "text-text-muted")}
+              className={cn("px-2.5 py-1 rounded-[6px] text-[11px] font-mono font-bold transition-all", chartType === "candlestick" ? "bg-[var(--accent)]/20 text-[var(--accent)]" : "text-[var(--foreground-muted)]")}
             >
               Bar
             </button>
           </div>
 
           {/* Indicator Toggles */}
-          <div className="flex items-center gap-1 bg-bg-primary p-1 rounded-lg border border-border">
+          <div className="flex items-center gap-1 bg-[var(--background-tertiary)] p-1 rounded-[8px] border border-[var(--border)]">
             <button
               onClick={() => setShowEMA(!showEMA)}
-              className={cn("px-2 py-1 rounded text-[10px] font-mono font-bold transition-all", showEMA ? "bg-[#3b82f6]/20 text-[#3b82f6] border border-[#3b82f6]/40" : "text-text-muted")}
+              className={cn("px-2 py-1 rounded-[6px] text-[10px] font-mono font-bold transition-all", showEMA ? "bg-[#3b82f6]/20 text-[#3b82f6] border border-[#3b82f6]/40" : "text-[var(--foreground-muted)]")}
             >
               20 EMA
             </button>
             <button
               onClick={() => setShowSMA(!showSMA)}
-              className={cn("px-2 py-1 rounded text-[10px] font-mono font-bold transition-all", showSMA ? "bg-[#f59e0b]/20 text-[#f59e0b] border border-[#f59e0b]/40" : "text-text-muted")}
+              className={cn("px-2 py-1 rounded-[6px] text-[10px] font-mono font-bold transition-all", showSMA ? "bg-[#f59e0b]/20 text-[#f59e0b] border border-[#f59e0b]/40" : "text-[var(--foreground-muted)]")}
             >
               50 SMA
             </button>
             <button
               onClick={() => setShowRSI(!showRSI)}
-              className={cn("px-2 py-1 rounded text-[10px] font-mono font-bold transition-all", showRSI ? "bg-[#a78bfa]/20 text-[#a78bfa] border border-[#a78bfa]/40" : "text-text-muted")}
+              className={cn("px-2 py-1 rounded-[6px] text-[10px] font-mono font-bold transition-all", showRSI ? "bg-[var(--ai)]/20 text-[var(--ai)] border border-[var(--ai)]/40" : "text-[var(--foreground-muted)]")}
             >
               RSI (14)
             </button>
             <button
               onClick={() => setShowVolume(!showVolume)}
-              className={cn("px-2 py-1 rounded text-[10px] font-mono font-bold transition-all", showVolume ? "bg-white/10 text-white border border-white/20" : "text-text-muted")}
+              className={cn("px-2 py-1 rounded-[6px] text-[10px] font-mono font-bold transition-all", showVolume ? "bg-[var(--foreground)]/10 text-[var(--foreground)] border border-[var(--foreground)]/20" : "text-[var(--foreground-muted)]")}
             >
               VOL
             </button>

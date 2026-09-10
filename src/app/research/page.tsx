@@ -90,39 +90,39 @@ function ResearchContent() {
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35 }}
-      className="w-full max-w-[1500px] mx-auto space-y-8 pb-12 min-w-0"
+      className="w-full max-w-[1500px] mx-auto space-y-6 pb-12 min-w-0"
     >
         {/* Search Section */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3">
             <div className="relative group">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted group-focus-within:text-accent transition-colors" />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[var(--foreground-muted)] group-focus-within:text-[var(--accent)] transition-colors" />
                 <input 
                     type="text" 
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleSearch(inputValue)}
                     placeholder="Search stock ticker (e.g. NVDA, MSFT, AAPL)..."
-                    className="w-full h-14 pl-12 pr-28 rounded-2xl bg-bg-secondary border border-border text-lg font-mono focus:border-accent focus:outline-none transition-all shadow-sm text-text-primary placeholder-text-muted"
+                    className="w-full h-14 pl-12 pr-32 rounded-[10px] bg-[var(--background-secondary)] border border-[var(--border)] text-base font-mono focus:border-[var(--accent)] focus:outline-none transition-all text-[var(--foreground)] placeholder-[var(--foreground-muted)]"
                 />
                 <Button 
                     variant="primary" 
                     size="sm" 
                     onClick={() => handleSearch(inputValue)}
-                    className="absolute right-2 top-2 h-10 px-6 font-bebas text-lg tracking-widest uppercase"
+                    className="absolute right-2 top-2 h-10 px-6 font-sans font-medium text-sm tracking-wide uppercase bg-[var(--accent)] text-black hover:opacity-90"
                 >
                     Research
                 </Button>
             </div>
             
-            <div className="flex items-center gap-3 overflow-x-auto pb-2 no-scrollbar">
-                <div className="flex items-center gap-1 text-[10px] font-mono font-bold uppercase text-text-muted whitespace-nowrap">
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
+                <div className="flex items-center gap-1 text-[11px] font-mono uppercase text-[var(--foreground-muted)] whitespace-nowrap">
                     <History className="h-3 w-3" /> Recent:
                 </div>
                 {recentSearches.map(s => (
                     <button 
                         key={s} 
                         onClick={() => handleSearch(s)}
-                        className="px-3 py-1 bg-bg-secondary hover:bg-border rounded-full text-[10px] font-mono font-bold text-text-secondary transition-colors border border-border/50 uppercase"
+                        className="px-2.5 py-1 bg-[var(--background-secondary)] hover:bg-[var(--background-tertiary)] rounded-[6px] text-[11px] font-mono text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors border border-[var(--border)] uppercase"
                     >
                         {s}
                     </button>
@@ -131,35 +131,35 @@ function ResearchContent() {
         </div>
 
         {!data && !isLoading && (
-            <div className="h-[60vh] flex flex-col items-center justify-center text-center opacity-50">
-                <div className="h-24 w-24 rounded-full bg-accent/5 flex items-center justify-center mb-6">
-                    <Sparkles className="h-12 w-12 text-accent" />
+            <div className="h-[60vh] flex flex-col items-center justify-center text-center opacity-70">
+                <div className="h-20 w-20 rounded-full bg-[var(--accent)]/10 flex items-center justify-center mb-5">
+                    <Sparkles className="h-10 w-10 text-[var(--accent)]" />
                 </div>
-                <h2 className="font-bebas text-4xl tracking-tight text-text-primary">Institutional Terminal Ready</h2>
-                <p className="text-sm font-mono text-text-muted max-w-sm mt-2">Enter a ticker symbol above to load Binance & Zerodha tier trading analytics.</p>
+                <h2 className="font-sans text-2xl font-semibold tracking-tight text-[var(--foreground)]">Institutional Terminal Ready</h2>
+                <p className="text-xs font-mono text-[var(--foreground-muted)] max-w-sm mt-2">Enter a ticker symbol above to load Binance & Zerodha tier trading analytics.</p>
             </div>
         )}
 
         {isLoading ? (
-            <div className="space-y-12">
-                <div className="h-40 w-full animate-shimmer bg-bg-secondary rounded-2xl" />
+            <div className="space-y-6">
+                <div className="h-36 w-full animate-shimmer bg-[var(--background-secondary)] rounded-[16px]" />
                 <div className="grid grid-cols-4 gap-4">
-                    {[1,2,3,4].map(i => <div key={i} className="h-24 bg-bg-secondary rounded-xl animate-shimmer" />)}
+                    {[1,2,3,4].map(i => <div key={i} className="h-20 bg-[var(--background-secondary)] rounded-[16px] animate-shimmer" />)}
                 </div>
-                <div className="h-96 w-full animate-shimmer bg-bg-secondary rounded-2xl" />
+                <div className="h-96 w-full animate-shimmer bg-[var(--background-secondary)] rounded-[16px]" />
             </div>
         ) : data && (
-            <div className="space-y-8 animate-in fade-in duration-500">
+            <div className="space-y-6 animate-in fade-in duration-300">
                 {/* 1. Header & Quick Metrics */}
                 <div className="space-y-6">
                     <StockHeader profile={data.profile} quote={data.quote} />
                     <FundamentalsGrid data={data.fundamentals} />
                 </div>
 
-                {/* 2. Binance & Zerodha Tier Pro Terminal Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Left & Middle Columns (Pro Chart & Deep Research) */}
-                    <div className="lg:col-span-2 space-y-8">
+                {/* 2. Binance & Zerodha Tier Pro Terminal Grid (65/35 split) */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    {/* Left & Middle Columns (65% -> col-span-8) */}
+                    <div className="lg:col-span-8 space-y-6">
                         {/* TradingView Interactive Chart Terminal */}
                         <TradingViewTerminalChart
                           ticker={ticker}
@@ -176,32 +176,32 @@ function ResearchContent() {
                         </section>
 
                         {/* AI Market Observations */}
-                        <section className="space-y-4">
+                        <section className="space-y-3">
                            <div className="flex items-center gap-2">
-                                <TrendingUp className="h-5 w-5 text-accent" />
-                                <h3 className="font-bebas text-2xl tracking-wide uppercase text-text-primary">AI Market Observations</h3>
+                                <TrendingUp className="h-4 w-4 text-[var(--accent)]" />
+                                <h3 className="font-sans text-base font-semibold uppercase tracking-wider text-[var(--foreground)]">AI Market Observations</h3>
                            </div>
                            <TechnicalSignals data={data.signals} isLoading={false} />
                         </section>
 
                         {/* Earnings & Fundamentals Depth */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <EarningsHistory ticker={ticker} data={data.earnings} />
                             <InsiderTransactions transactions={data.insiders} isLoading={false} aiAnalysis={data.insiderAnalysis} />
                         </div>
 
                         {/* Options Volatility */}
-                        <section className="space-y-4">
+                        <section className="space-y-3">
                             <div className="flex items-center gap-2">
-                                <Activity className="h-5 w-5 text-accent" />
-                                <h3 className="font-bebas text-2xl tracking-wide uppercase text-text-primary">Advanced Volatility</h3>
+                                <Activity className="h-4 w-4 text-[var(--accent)]" />
+                                <h3 className="font-sans text-base font-semibold uppercase tracking-wider text-[var(--foreground)]">Advanced Volatility</h3>
                             </div>
                             <OptionsChain ticker={ticker} options={data.options} isLoading={false} />
                         </section>
                     </div>
 
-                    {/* Right Column (Order Desk, Order Book Depth & Intelligence) */}
-                    <div className="space-y-8">
+                    {/* Right Column (35% -> col-span-4) */}
+                    <div className="lg:col-span-4 space-y-6">
                         {/* Zerodha Kite Order Entry Desk */}
                         <OrderDeskWidget ticker={ticker} currentPrice={data.quote.currentPrice} />
 
@@ -211,11 +211,11 @@ function ResearchContent() {
                         {/* Pre-Trade Coach */}
                         <PreTradeChecklist ticker={ticker} price={data.quote.currentPrice} />
 
-                        {/* Catch-up News */}
-                        <section className="space-y-4">
+                        {/* Intelligence Feed */}
+                        <section className="space-y-3">
                             <div className="flex justify-between items-center">
-                                <h3 className="font-bebas text-xl tracking-wide uppercase text-text-primary">Intelligence Feed</h3>
-                                <Badge variant="outline" className="scale-75">{data.news.length} Items</Badge>
+                                <h3 className="font-sans text-base font-semibold uppercase tracking-wider text-[var(--foreground)]">Intelligence Feed</h3>
+                                <Badge variant="outline" className="text-[10px]">{data.news.length} Items</Badge>
                             </div>
                             <NewsSection news={data.news} isLoading={false} />
                         </section>

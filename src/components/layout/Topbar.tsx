@@ -37,14 +37,16 @@ export function Topbar() {
   }
 
   const getPageTitle = () => {
-    if (pathname === "/dashboard" || pathname === "/") return "DASHBOARD";
-    if (pathname === "/research") return "RESEARCH TERMINAL";
-    if (pathname === "/sentiment") return "SENTIMENT ANALYSIS";
-    if (pathname === "/market-bias") return "AI MARKET BIAS";
-    if (pathname === "/calendar") return "ECONOMIC CALENDAR";
-    if (pathname === "/journal") return "TRADE JOURNAL";
-    if (pathname === "/settings") return "SETTINGS";
-    return "MARKET INTELLIGENCE";
+    if (pathname === "/dashboard" || pathname === "/") return "Dashboard";
+    if (pathname === "/research") return "Research";
+    if (pathname === "/sentiment") return "Sentiment Analysis";
+    if (pathname === "/market-bias") return "Market Bias";
+    if (pathname === "/calendar") return "Economic Calendar";
+    if (pathname === "/journal") return "Trade Journal";
+    if (pathname === "/settings") return "Settings";
+    if (pathname === "/about") return "About";
+    if (pathname === "/architecture") return "Architecture";
+    return "Market Intelligence";
   };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -57,51 +59,52 @@ export function Topbar() {
   if (!mounted) return null;
 
   return (
-    <header className="sticky top-0 z-40 flex flex-col w-full max-w-full overflow-x-hidden bg-[var(--bg-primary)]">
-      {/* Live Market Ticker Tape */}
+    <header className="sticky top-0 z-40 flex flex-col w-full max-w-full overflow-x-hidden">
+      {/* Row 1 — Ticker Tape (36px) */}
       <TickerBar />
 
-      {/* Main Bar Row (Height: 68px, Border-bottom: 1px border) */}
-      <div className="flex h-[68px] items-center justify-between px-6 border-b border-border bg-[var(--bg-primary)] max-w-full overflow-x-hidden">
-        {/* Left: Title & Date */}
+      {/* Row 2 — Main Bar (60px) */}
+      <div className="flex h-[60px] items-center justify-between px-6 border-b border-[var(--border)] bg-[var(--background)] max-w-full overflow-x-hidden">
+        {/* Left: Page Title + Date */}
         <div className="flex flex-col">
-          <h1 className="font-bebas text-[24px] tracking-wide text-text-primary leading-none">
+          <h1 className="font-sans text-[16px] font-semibold text-[var(--foreground)] leading-none">
             {getPageTitle()}
           </h1>
-          <p className="font-sans text-[11px] text-text-muted mt-0.5">
+          <p className="font-sans text-[11px] text-[var(--foreground-muted)] mt-1">
             {format(currentTime, "EEEE, MMMM d, yyyy · HH:mm:ss")} ET
           </p>
         </div>
 
         {/* Right: Search, Notifications & Theme Toggle */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           {/* Search Bar */}
           <form onSubmit={handleSearchSubmit} className="relative hidden md:block">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-text-muted" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[var(--foreground-muted)]" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search ticker... ⌘K"
-              className="h-[34px] w-[160px] rounded-[8px] border border-border bg-bg-card pl-9 pr-3 text-[12px] font-sans text-text-primary placeholder-text-muted focus:border-border-emphasis focus:outline-none focus:w-[200px] transition-all"
+              className="h-[36px] w-[200px] rounded-[8px] border border-[var(--border)] bg-[var(--background-secondary)] pl-9 pr-3 text-[12px] font-sans text-[var(--foreground)] placeholder-[var(--foreground-muted)] focus:border-[var(--border-emphasis)] focus:outline-none transition-all"
             />
           </form>
 
-          {/* Bell Icon Button */}
-          <button className="flex h-[34px] w-[34px] items-center justify-center rounded-[8px] border border-border bg-bg-card transition-colors hover:border-border-emphasis">
-            <Bell className="h-[15px] w-[15px] text-text-secondary" />
+          {/* Notification Bell */}
+          <button className="relative flex h-[36px] w-[36px] items-center justify-center rounded-[8px] border border-[var(--border)] bg-transparent text-[var(--foreground-secondary)] hover:border-[var(--border-emphasis)] hover:text-[var(--foreground)] transition-colors">
+            <Bell className="h-4 w-4" />
+            <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-[#00d084]" />
           </button>
 
-          {/* Theme Toggle Button */}
+          {/* Theme Toggle */}
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="flex h-[34px] w-[34px] items-center justify-center rounded-[8px] border border-border bg-bg-card transition-colors hover:border-border-emphasis"
+            className="flex h-[36px] w-[36px] items-center justify-center rounded-[8px] border border-[var(--border)] bg-transparent text-[var(--foreground-secondary)] hover:border-[var(--border-emphasis)] hover:text-[var(--foreground)] transition-colors"
             title="Toggle theme"
           >
             {theme === "dark" ? (
-              <Sun className="h-[15px] w-[15px] text-text-secondary" />
+              <Sun className="h-4 w-4" />
             ) : (
-              <Moon className="h-[15px] w-[15px] text-text-secondary" />
+              <Moon className="h-4 w-4" />
             )}
           </button>
         </div>
@@ -109,4 +112,3 @@ export function Topbar() {
     </header>
   );
 }
-

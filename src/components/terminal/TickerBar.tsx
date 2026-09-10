@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ArrowUpRight, ArrowDownRight, Activity } from "lucide-react";
 import { apiClient } from "@/lib/api-client";
 import { cn, formatPercent } from "@/lib/utils";
 
@@ -49,28 +48,33 @@ export function TickerBar() {
   ];
 
   return (
-    <div className="flex h-[36px] w-full items-center overflow-hidden bg-[#040810] border-b border-[#1a2540] px-4 font-mono text-xs tabular-nums select-none">
-      <div className="flex items-center gap-2 pr-4 border-r border-[#1a2540] text-[10px] font-bold text-[#00d084] uppercase tracking-wider shrink-0">
-        <span className="h-2 w-2 rounded-full bg-[#00d084] animate-ping" />
-        LIVE MARKETS
+    <div className="flex h-[36px] w-full items-center overflow-hidden bg-[var(--sidebar)] border-b border-[var(--border)] font-mono text-xs tabular-nums select-none">
+      <div className="flex items-center gap-2 px-4 border-r border-[var(--border)] text-[10px] font-medium text-[#00d084] uppercase tracking-wider shrink-0">
+        <span className="relative flex h-1.5 w-1.5">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#00d084] opacity-75" />
+          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#00d084]" />
+        </span>
+        LIVE
       </div>
 
-      <div className="flex animate-marquee whitespace-nowrap gap-6 py-1 items-center">
+      <div className="flex animate-marquee whitespace-nowrap gap-0 py-1 items-center">
         {list.concat(list).map((item, i) => {
           const isPos = item.change >= 0;
           return (
-            <div key={i} className="flex items-center gap-2 text-[11px] hover:opacity-80 cursor-pointer transition-opacity">
-              <span className="text-[10px] text-[#64748b] uppercase font-bold tracking-wider">
+            <div key={i} className="flex items-center gap-2 text-[11px] hover:opacity-80 cursor-pointer transition-opacity px-3">
+              <span className="text-[11px] text-[#475569] uppercase font-sans font-medium">
                 {item.symbol.replace("^", "")}
               </span>
-              <span className="text-text-primary font-bold">
+              <span className="text-[#e2e8f0] font-medium font-mono text-[12px]">
                 {item.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
-              <span className={cn("font-bold text-[10px] flex items-center gap-0.5 px-1 rounded", isPos ? "text-[#00d084] bg-[#00d084]/10" : "text-[#ff4d4d] bg-[#ff4d4d]/10")}>
-                {isPos ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
+              <span className={cn(
+                "font-medium text-[11px] font-mono",
+                isPos ? "text-[#00d084]" : "text-[#ef4444]"
+              )}>
                 {isPos ? "+" : ""}{formatPercent(item.changePercent)}
               </span>
-              <span className="text-[#1a2540] ml-1">│</span>
+              <span className="text-[#334155] ml-1">·</span>
             </div>
           );
         })}

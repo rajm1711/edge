@@ -20,7 +20,7 @@ export function SlidePanel({
   title,
   subtitle,
   badge,
-  width = "w-full md:w-[420px]",
+  width = "w-full md:w-[400px]",
   children,
 }: SlidePanelProps) {
   useEffect(() => {
@@ -39,37 +39,37 @@ export function SlidePanel({
     <div className="fixed inset-0 z-[100] flex justify-end">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity animate-in fade-in duration-200"
+        className="fixed inset-0 bg-black/50 backdrop-blur-[4px] transition-opacity animate-in fade-in duration-200"
         onClick={onClose}
       />
 
       {/* Slide Drawer */}
       <div
         className={cn(
-          "relative z-[101] flex h-full flex-col bg-bg-card border-l border-border shadow-2xl font-sans animate-in slide-in-from-right duration-250 ease-out",
+          "relative z-[101] flex h-full flex-col bg-[var(--background-secondary)] border-l border-[var(--border)] shadow-2xl font-sans animate-in slide-in-from-right duration-250 ease-out",
           width
         )}
       >
         {/* Panel Header */}
-        <div className="flex items-center justify-between border-b border-border px-6 py-4">
+        <div className="flex items-center justify-between border-b border-[var(--border)] px-6 py-4">
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="font-bebas text-[20px] tracking-wide text-text-primary">
+              <h2 className="font-sans text-[16px] font-semibold text-[var(--foreground)]">
                 {title}
               </h2>
               {badge && (
-                <span className="rounded-[4px] bg-[rgba(167,139,250,0.10)] border border-[rgba(167,139,250,0.25)] px-2 py-0.5 font-mono text-[10px] uppercase text-ai-purple">
+                <span className="rounded-[6px] bg-[rgba(167,139,250,0.08)] border border-[rgba(167,139,250,0.20)] px-2 py-0.5 font-mono text-[10px] uppercase text-[#a78bfa]">
                   {badge}
                 </span>
               )}
             </div>
             {subtitle && (
-              <p className="font-sans text-[11px] text-text-muted">{subtitle}</p>
+              <p className="font-sans text-[11px] text-[var(--foreground-muted)] mt-0.5">{subtitle}</p>
             )}
           </div>
           <button
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-[6px] text-text-secondary hover:bg-bg-hover hover:text-text-primary transition-colors"
+            className="flex h-8 w-8 items-center justify-center rounded-[8px] text-[var(--foreground-secondary)] hover:bg-[var(--background-tertiary)] hover:text-[var(--foreground)] transition-colors"
           >
             <X className="h-4 w-4" />
           </button>

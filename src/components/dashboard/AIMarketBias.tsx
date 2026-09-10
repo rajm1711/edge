@@ -1,15 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Zap, ShieldAlert, Target } from "lucide-react";
+import { Zap, Target, RefreshCw } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { apiClient } from "@/lib/api-client";
-import { format } from "date-fns";
+import { format, addMinutes } from "date-fns";
 import { cn } from "@/lib/utils";
 
 export function AIMarketBias() {
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [nextUpdate, setNextUpdate] = useState<Date | null>(null);
+  const [timeRemaining, setTimeRemaining] = useState<string>("15:00");
 
   useEffect(() => {
     async function fetchBias() {
@@ -19,6 +21,7 @@ export function AIMarketBias() {
         const aiResponse = await apiClient.marketBiasAI(marketData.data);
         if (aiResponse.success) {
           setData(aiResponse.data);
+          setNextUpdate(addMinutes(new Date(), 15));
         }
       }
       setIsLoading(false);
@@ -26,17 +29,34 @@ export function AIMarketBias() {
     fetchBias();
   }, []);
 
+  useEffect(() => {
+    if (!nextUpdate) return;
+    const interval = setInterval(() => {
+      const now = new Date();
+      const diff = nextUpdate.getTime() - now.getTime();
+      if (diff <= 0) {
+        setTimeRemaining("00:00");
+      } else {
+        const m = Math.floor((diff / 1000) / 60);
+        const s = Math.floor((diff / 1000) % 60);
+        setTimeRemaining(`${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [nextUpdate]);
+
   if (isLoading) {
     return (
-      <div className="h-[260px] w-full rounded-[12px] border-l-[3px] border-l-[#a78bfa] border-y border-r border-[#1a2540] bg-[rgba(167,139,250,0.04)] p-6 font-sans">
-        <div className="flex items-center gap-2 text-[#a78bfa]">
-          <Zap className="h-4 w-4 animate-bounce" />
-          <span className="font-mono text-[11px] uppercase tracking-wider font-medium">
+      <div className="rounded-[16px] border-l-[3px] border-l-[#a78bfa] border-y border-r border-[var(--border)] p-6 font-sans" style={{ background: `linear-gradient(to right, rgba(167,139,250,0.02), var(--card))` }}>
+        <div className="flex items-center gap-2 text-[#a78bfa] mb-4">
+          <Zap className="h-4 w-4 animate-pulse" />
+          <span className="font-sans text-[13px] text-[#a78bfa]">
             AI is analyzing real-time market bias...
           </span>
         </div>
-        <Skeleton className="mt-4 h-12 w-1/3 rounded-[6px]" />
-        <Skeleton className="mt-4 h-24 w-full rounded-[6px]" />
+        <p className="text-[11px] text-[var(--foreground-muted)] font-sans">Powered by Llama 3.3 70B</p>
+        <Skeleton className="mt-4 h-14 w-1/3 rounded-[8px]" />
+        <Skeleton className="mt-4 h-28 w-full rounded-[8px]" />
       </div>
     );
   }
@@ -55,86 +75,72 @@ export function AIMarketBias() {
   };
 
   const currentData = data || defaultData;
-  const isBullish = currentData.overallBias?.includes("BULLISH");
+  const biasStr = currentData.overallBias?.toUpperCase() || "BULLISH";
+  const isBullish = biasStr.includes("BULLISH");
+  const isBearish = biasStr.includes("BEARISH");
+  const biasColor = isBullish ? "#00d084" : isBearish ? "#ef4444" : "#f59e0b";
 
   return (
-    <div className="relative overflow-hidden rounded-[12px] border-l-[3px] border-l-ai-purple border-y border-r border-border bg-ai-purple-dim p-6 font-sans transition-all hover:border-border-emphasis">
+    <div className="rounded-[16px] border-l-[3px] border-y border-r border-[var(--border)] p-6 font-sans transition-all hover:border-[var(--border-emphasis)]" style={{ borderLeftColor: '#a78bfa', background: `linear-gradient(to right, rgba(167,139,250,0.02), var(--card))` }}>
       {/* Header Row */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <Zap className="h-4 w-4 text-ai-purple" />
-            <span className="font-sans text-[11px] font-medium uppercase tracking-[0.08em] text-ai-purple">
-              AI MARKET BIAS & SYNTHESIS
-            </span>
-          </div>
-          <p className="text-[12px] text-text-secondary">
-            Multi-factor machine learning evaluation of technicals, breadth, and macro risks
-          </p>
+        <div className="flex items-center gap-2">
+          <Zap className="h-4 w-4 text-[#a78bfa]" />
+          <span className="text-[11px] font-sans font-medium uppercase tracking-[0.06em] text-[#a78bfa]">
+            AI MARKET BIAS
+          </span>
+          <span className="rounded-[6px] bg-[rgba(167,139,250,0.08)] border border-[rgba(167,139,250,0.20)] px-2 py-0.5 font-mono text-[10px] uppercase text-[#a78bfa]">
+            AI
+          </span>
         </div>
+        <span className="font-mono text-[12px] text-[var(--foreground-muted)]">
+          Refreshes in {timeRemaining}
+        </span>
+      </div>
 
-        {/* Big Bias Label & Confidence */}
-        <div className="flex flex-col items-start md:items-end">
-          <h2
-            className={cn(
-              "font-bebas text-[40px] tracking-tight leading-none uppercase",
-              isBullish ? "text-positive" : "text-negative"
-            )}
-          >
-            {currentData.overallBias}
-          </h2>
-          <div className="flex items-center gap-2 mt-1">
-            <span className="font-sans text-[11px] text-text-muted">Confidence</span>
-            <div className="w-24 h-1.5 bg-border rounded-full overflow-hidden">
-              <div
-                className="h-full bg-positive transition-all duration-1000"
-                style={{ width: `${currentData.confidenceScore}%` }}
-              />
-            </div>
-            <span className="font-mono text-[11px] font-medium text-positive">
-              {currentData.confidenceScore}%
-            </span>
+      {/* Hero Bias + Confidence */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-5">
+        <h2
+          className="font-bebas text-[52px] tracking-tight leading-none uppercase"
+          style={{ color: biasColor }}
+        >
+          {biasStr}
+        </h2>
+        <span className="font-mono text-[16px] font-medium" style={{ color: biasColor }}>
+          {currentData.confidenceScore}% confidence
+        </span>
+      </div>
+
+      {/* Confidence Bar */}
+      <div className="h-1.5 w-full bg-[var(--border)] rounded-full overflow-hidden mb-6">
+        <div
+          className="h-full rounded-full transition-all duration-1000"
+          style={{ width: `${currentData.confidenceScore}%`, backgroundColor: biasColor }}
+        />
+      </div>
+
+      {/* Reasoning Grid — 2×2 */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-5">
+        {currentData.reasoning?.map((reason: string, i: number) => (
+          <div key={i} className="flex items-start gap-2.5 bg-[var(--background-secondary)] p-3 rounded-[8px] border border-[var(--border)]">
+            <span className="h-1.5 w-1.5 rounded-full shrink-0 mt-1.5" style={{ backgroundColor: biasColor }} />
+            <p className="text-[13px] text-[var(--foreground-secondary)] leading-relaxed">{reason}</p>
           </div>
+        ))}
+      </div>
+
+      {/* Data Strip */}
+      <div className="flex flex-wrap gap-6 pt-4 border-t border-[var(--border)]">
+        <div className="flex flex-col">
+          <span className="text-[10px] text-[var(--foreground-muted)] uppercase font-sans">Analyst Note</span>
+          <span className="text-[12px] font-mono text-[var(--foreground)] mt-0.5 italic">&quot;{currentData.analystNote}&quot;</span>
         </div>
       </div>
 
-      {/* Main Content 2 Columns */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Left Reasoning Points */}
-        <div>
-          <h4 className="font-sans text-[11px] font-medium uppercase tracking-[0.08em] text-text-muted mb-3 flex items-center gap-1.5">
-            <Target className="h-3.5 w-3.5 text-positive" /> Core Catalyst Reasoning
-          </h4>
-          <ul className="space-y-2">
-            {currentData.reasoning?.map((reason: string, i: number) => (
-              <li key={i} className="flex items-start gap-2.5">
-                <div className="mt-1.5 h-1.5 w-1.5 rounded-full bg-positive shrink-0" />
-                <p className="text-[12px] text-text-secondary leading-relaxed">{reason}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Right Analyst Note Box */}
-        <div className="rounded-[8px] bg-bg-card border border-border p-4 flex flex-col justify-between">
-          <div>
-            <h4 className="font-sans text-[11px] font-medium uppercase tracking-[0.08em] text-text-muted mb-2 flex items-center gap-1.5">
-              <ShieldAlert className="h-3.5 w-3.5 text-neutral" /> Analyst Note
-            </h4>
-            <p className="text-[12px] text-text-primary italic leading-relaxed mb-3">
-              &quot;{currentData.analystNote}&quot;
-            </p>
-          </div>
-
-          <div className="pt-3 border-t border-border flex justify-between items-center text-[11px]">
-            <span className="text-text-muted">Outlook: <strong className="text-text-secondary font-normal">{currentData.tomorrowOutlook}</strong></span>
-            <span className="font-sans text-text-muted">
-              Refreshed {format(new Date(), "HH:mm")} ET
-            </span>
-          </div>
-        </div>
-      </div>
+      {/* Disclaimer */}
+      <p className="text-[11px] text-[var(--foreground-muted)] italic mt-4">
+        AI-generated analysis is for informational and educational purposes only. Not financial advice.
+      </p>
     </div>
   );
 }
-

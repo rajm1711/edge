@@ -14,9 +14,9 @@ interface NewsSectionProps {
 export function NewsSection({ news, isLoading }: NewsSectionProps) {
   if (isLoading) {
     return (
-      <div className="space-y-4">
+      <div className="space-y-3">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="h-24 w-full animate-shimmer bg-bg-secondary rounded-xl" />
+          <div key={i} className="h-24 w-full animate-shimmer bg-[var(--background-secondary)] rounded-[16px]" />
         ))}
       </div>
     );
@@ -25,28 +25,27 @@ export function NewsSection({ news, isLoading }: NewsSectionProps) {
   if (!news || news.length === 0) return null;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {news.slice(0, 10).map((item, i) => {
-        // Sentiment would normally come from AI, but for now we color by source or headline keywords as fallback
         const isBullish = item.headline.toLowerCase().includes('beat') || item.headline.toLowerCase().includes('high') || item.headline.toLowerCase().includes('growth');
         const isBearish = item.headline.toLowerCase().includes('miss') || item.headline.toLowerCase().includes('fall') || item.headline.toLowerCase().includes('drop');
 
         return (
-          <Card key={i} variant="default" className="group hover:border-accent/30 transition-all border-border/50">
-            <CardContent className="p-4 flex gap-4">
+          <Card key={i} variant="default" className="group hover:border-[var(--accent)]/30 transition-all rounded-[16px]">
+            <CardContent className="p-3.5 flex gap-3">
               {item.image && (
-                <div className="hidden sm:block h-20 w-32 rounded-lg bg-bg-secondary overflow-hidden flex-shrink-0">
+                <div className="hidden sm:block h-20 w-28 rounded-[8px] bg-[var(--background-secondary)] overflow-hidden flex-shrink-0">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={item.image} alt="" className="h-full w-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
                 </div>
               )}
-              <div className="flex-1 space-y-2">
+              <div className="flex-1 space-y-1.5 min-w-0">
                 <div className="flex justify-between items-start">
                     <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-mono font-bold uppercase text-accent tracking-tighter">
+                        <span className="text-[10px] font-mono uppercase text-[var(--accent)] tracking-wider">
                             {item.source}
                         </span>
-                        <span className="text-[10px] text-text-muted">
+                        <span className="text-[10px] text-[var(--foreground-muted)] font-mono">
                             {formatDistanceToNow(new Date(item.datetime * 1000))} ago
                         </span>
                     </div>
@@ -54,19 +53,19 @@ export function NewsSection({ news, isLoading }: NewsSectionProps) {
                         {isBullish ? 'BULLISH' : isBearish ? 'BEARISH' : 'NEUTRAL'}
                     </Badge>
                 </div>
-                <h4 className="text-sm font-bold text-text-primary leading-tight group-hover:text-accent transition-colors">
+                <h4 className="text-xs font-semibold text-[var(--foreground)] leading-snug group-hover:text-[var(--accent)] transition-colors line-clamp-2">
                   {item.headline}
                 </h4>
-                <p className="text-[11px] text-text-secondary line-clamp-2 leading-relaxed">
+                <p className="text-[11px] text-[var(--foreground-muted)] line-clamp-2 leading-relaxed">
                   {item.summary}
                 </p>
-                <div className="flex justify-end">
+                <div className="flex justify-end pt-1">
                     <a 
                         href={item.url} 
                         target="_blank" 
-                        className="text-[10px] font-bold font-mono uppercase text-text-muted hover:text-accent flex items-center gap-1 transition-colors"
+                        className="text-[10px] font-mono uppercase text-[var(--foreground-muted)] hover:text-[var(--accent)] flex items-center gap-1 transition-colors"
                     >
-                        Read Full <ExternalLink className="h-2.5 w-2.5" />
+                        Read Article <ExternalLink className="h-2.5 w-2.5" />
                     </a>
                 </div>
               </div>

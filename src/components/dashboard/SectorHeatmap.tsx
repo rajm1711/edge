@@ -26,12 +26,12 @@ interface StockData {
 }
 
 const getHeatmapColor = (changePercent: number) => {
-  if (changePercent === undefined || changePercent === null) return "#1a2540";
+  if (changePercent === undefined || changePercent === null) return "#1e2a40";
   if (changePercent > 2) return "#00d084";
   if (changePercent > 0) return "#009961";
-  if (changePercent < -2) return "#ff4d4d";
-  if (changePercent < 0) return "#cc3d3d";
-  return "#1a2540";
+  if (changePercent < -2) return "#ef4444";
+  if (changePercent < 0) return "#dc2626";
+  return "#1e2a40";
 };
 
 const CustomizedContent = (props: any) => {
@@ -47,7 +47,7 @@ const CustomizedContent = (props: any) => {
         height={height}
         style={{
           fill: color,
-          stroke: "#0d1421",
+          stroke: "var(--background)",
           strokeWidth: 2,
         }}
         className="transition-opacity duration-100 hover:opacity-85 cursor-pointer"
@@ -90,12 +90,12 @@ const CustomTooltip = ({ active, payload }: any) => {
     const isPositive = data.changePercent >= 0;
 
     return (
-      <div className="bg-[#0d1421] border border-[#243358] p-3 rounded-[8px] shadow-xl font-sans">
-        <p className="font-mono font-medium text-[14px] text-white uppercase mb-0.5">{data.name}</p>
-        <p className="text-[11px] font-sans text-[#718096] uppercase mb-2">{data.sector}</p>
+      <div className="bg-[var(--background-tertiary)] border border-[var(--border-emphasis)] p-3 rounded-[10px] shadow-xl font-sans">
+        <p className="font-mono font-medium text-[14px] text-[var(--foreground)] uppercase mb-0.5">{data.name}</p>
+        <p className="text-[11px] font-sans text-[var(--foreground-muted)] uppercase mb-2">{data.sector}</p>
         <div className="flex items-center gap-2 font-mono text-[12px]">
-          <span className="text-[#4a5568]">Change:</span>
-          <span className={isPositive ? "text-[#00d084]" : "text-[#ff4d4d]"}>
+          <span className="text-[var(--foreground-muted)]">Change:</span>
+          <span className={isPositive ? "text-[#00d084]" : "text-[#ef4444]"}>
             {isPositive ? "+" : ""}{formatPercent(data.changePercent)}
           </span>
         </div>
@@ -129,18 +129,18 @@ export function SectorHeatmap({ data }: { data: StockData[] }) {
   const sectorCount = new Set(data?.map(s => SECTOR_MAP[s.symbol] || "Other")).size;
 
   return (
-    <Card variant="terminal" className="h-[380px] flex flex-col overflow-hidden">
-      <CardHeader className="flex flex-row justify-between items-center py-3 border-b border-border shrink-0">
+    <Card variant="terminal" className="h-[380px] flex flex-col overflow-hidden rounded-[16px]">
+      <CardHeader className="flex flex-row justify-between items-center py-3 border-b border-[var(--border)] shrink-0">
         <div className="flex items-center gap-2">
-          <Layers className="h-4 w-4 text-info" />
-          <h3 className="font-bebas text-[18px] tracking-wide uppercase text-text-primary">Market Treemap</h3>
+          <Layers className="h-4 w-4 text-[var(--info)]" />
+          <h3 className="text-[11px] font-sans font-medium uppercase tracking-[0.06em] text-[var(--foreground-muted)]">Market Treemap</h3>
         </div>
         <Badge variant="outline" className="font-mono text-[10px]">{sectorCount} Sectors</Badge>
       </CardHeader>
       <CardContent className="p-2 flex-1 relative">
         {data.length === 0 ? (
           <div className="h-full flex items-center justify-center">
-            <p className="text-[11px] font-mono uppercase text-text-muted">Mapping Market Treemap...</p>
+            <p className="text-[11px] font-mono uppercase text-[var(--foreground-muted)]">Mapping Market Treemap...</p>
           </div>
         ) : (
           <div className="absolute inset-0 p-2">
@@ -149,7 +149,7 @@ export function SectorHeatmap({ data }: { data: StockData[] }) {
                 data={treeData}
                 dataKey="size"
                 aspectRatio={4 / 3}
-                stroke="#0d1421"
+                stroke="var(--background)"
                 content={<CustomizedContent />}
               >
                 <Tooltip content={<CustomTooltip />} />

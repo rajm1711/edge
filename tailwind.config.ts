@@ -32,15 +32,20 @@ const config: Config = {
         neutral: "var(--neutral)",
         info: "var(--info)",
         "ai-purple": "var(--ai-purple)",
+        destructive: "var(--destructive)",
+        warning: "var(--warning)",
+        red: "var(--destructive)",
       },
       fontFamily: {
         bebas: ["var(--font-bebas)", "sans-serif"],
         mono: ["var(--font-jetbrains)", "monospace"],
         sans: ["var(--font-dm-sans)", "sans-serif"],
       },
+      borderRadius: {
+        card: "16px",
+      },
     },
   },
   plugins: [],
 };
 export default config;
-

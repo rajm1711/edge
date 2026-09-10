@@ -12,43 +12,47 @@ interface InsiderTransactionsProps {
 }
 
 export function InsiderTransactions({ transactions, isLoading, aiAnalysis }: InsiderTransactionsProps) {
-  if (isLoading) return <div className="h-64 w-full animate-shimmer bg-bg-secondary rounded-xl" />;
-  if (!transactions || transactions.length === 0) return null;
+  const list = Array.isArray(transactions)
+    ? transactions
+    : Array.isArray((transactions as any)?.transactions)
+    ? (transactions as any).transactions
+    : [];
+
+  if (isLoading) return <div className="h-64 w-full animate-shimmer bg-[var(--background-secondary)] rounded-[16px]" />;
+  if (!list || list.length === 0) return null;
 
   return (
-    <div className="space-y-6">
-      <Card variant="default" className="overflow-hidden">
-        <CardHeader className="py-3">
-          <h3 className="font-bebas text-lg tracking-wide uppercase">Insider Activity</h3>
+    <div className="space-y-4">
+      <Card variant="default" className="overflow-hidden rounded-[16px]">
+        <CardHeader className="py-3.5">
+          <h3 className="font-sans text-sm font-semibold uppercase tracking-wider text-[var(--foreground)]">Insider Activity</h3>
         </CardHeader>
         <CardContent className="p-0 overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-border bg-bg-secondary/30">
-                <th className="p-3 text-[10px] font-mono font-bold uppercase tracking-widest text-text-muted">Person</th>
-                <th className="p-3 text-[10px] font-mono font-bold uppercase tracking-widest text-text-muted">Type</th>
-                <th className="p-3 text-[10px] font-mono font-bold uppercase tracking-widest text-text-muted">Shares</th>
-                <th className="p-3 text-[10px] font-mono font-bold uppercase tracking-widest text-text-muted">Price</th>
-                <th className="p-3 text-[10px] font-mono font-bold uppercase tracking-widest text-text-muted text-right">Date</th>
+              <tr className="border-b border-[var(--border)] bg-[var(--background-secondary)] h-9">
+                <th className="px-3 text-[10px] font-mono font-bold uppercase tracking-wider text-[var(--foreground-muted)]">Person</th>
+                <th className="px-3 text-[10px] font-mono font-bold uppercase tracking-wider text-[var(--foreground-muted)]">Type</th>
+                <th className="px-3 text-[10px] font-mono font-bold uppercase tracking-wider text-[var(--foreground-muted)]">Shares</th>
+                <th className="px-3 text-[10px] font-mono font-bold uppercase tracking-wider text-[var(--foreground-muted)]">Price</th>
+                <th className="px-3 text-[10px] font-mono font-bold uppercase tracking-wider text-[var(--foreground-muted)] text-right">Date</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border/50 text-[11px]">
-              {transactions.slice(0, 8).map((t, i) => {
-                const isBuy = t.transactionType.includes('S') || t.transactionType.includes('P') || t.transactionType.includes('A');
-                // Finnhub codes: S=Sale, P=Purchase, A=Acquisition (Buy). Simplified for demo.
+            <tbody className="divide-y divide-[var(--border)] text-[11px]">
+              {list.slice(0, 8).map((t: any, i: number) => {
                 const isActualBuy = t.transactionType.includes('P') || t.transactionType.includes('A');
 
                 return (
-                  <tr key={i} className="hover:bg-bg-secondary/30 transition-colors">
-                    <td className="p-3 font-medium text-text-primary capitalize">{t.name.toLowerCase()}</td>
-                    <td className="p-3">
+                  <tr key={i} className="hover:bg-[var(--background-secondary)]/50 transition-colors h-11">
+                    <td className="px-3 font-medium text-[var(--foreground)] capitalize">{t.name.toLowerCase()}</td>
+                    <td className="px-3">
                       <Badge variant={isActualBuy ? 'success' : 'danger'} className="scale-75 origin-left">
                         {isActualBuy ? 'BUY' : 'SELL'}
                       </Badge>
                     </td>
-                    <td className="p-3 font-mono">{t.share?.toLocaleString()}</td>
-                    <td className="p-3 font-mono">{formatCurrency(t.transactionPrice)}</td>
-                    <td className="p-3 text-right text-text-muted font-mono">{t.date}</td>
+                    <td className="px-3 font-mono text-[var(--foreground)]">{t.share?.toLocaleString()}</td>
+                    <td className="px-3 font-mono text-[var(--foreground)]">{formatCurrency(t.transactionPrice)}</td>
+                    <td className="px-3 text-right text-[var(--foreground-muted)] font-mono">{t.date}</td>
                   </tr>
                 );
               })}
@@ -58,19 +62,19 @@ export function InsiderTransactions({ transactions, isLoading, aiAnalysis }: Ins
       </Card>
 
       {aiAnalysis && (
-        <Card variant="ai" className="border-[rgba(167,139,250,0.20)] bg-[rgba(167,139,250,0.04)]">
+        <Card variant="ai" className="border-[var(--ai)]/30 bg-[var(--ai-dim)] rounded-[16px]">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 mb-3">
-              <Sparkles className="h-4 w-4 text-accent" />
-              <h4 className="font-bebas text-sm tracking-widest uppercase text-text-primary">Insider Sentiment Analysis</h4>
+              <Sparkles className="h-4 w-4 text-[var(--ai)]" />
+              <h4 className="font-sans text-xs font-semibold tracking-wider uppercase text-[var(--foreground)]">Insider Sentiment Analysis</h4>
               <Badge variant={aiAnalysis.sentiment === 'bullish' ? 'success' : 'danger'} className="ml-auto">
                 {aiAnalysis.sentiment}
               </Badge>
             </div>
-            <p className="text-xs text-text-primary mb-3 italic">&quot;{aiAnalysis.summary}&quot;</p>
-            <div className="bg-bg-card/50 p-2 rounded border border-accent/10">
-              <p className="text-[10px] font-bold text-text-muted uppercase mb-1">Key Observation</p>
-              <p className="text-[11px] text-text-secondary">{aiAnalysis.keyObservation}</p>
+            <p className="text-xs text-[var(--foreground)] mb-3 italic">&quot;{aiAnalysis.summary}&quot;</p>
+            <div className="bg-[var(--card)] p-2.5 rounded-[8px] border border-[var(--border)]">
+              <p className="text-[10px] font-bold text-[var(--foreground-muted)] uppercase mb-1">Key Observation</p>
+              <p className="text-[11px] text-[var(--foreground-muted)]">{aiAnalysis.keyObservation}</p>
             </div>
           </CardContent>
         </Card>

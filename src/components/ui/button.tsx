@@ -15,24 +15,24 @@ export function Button({
   ...props
 }: ButtonProps) {
   const variants = {
-    primary: "bg-accent text-bg-sidebar hover:bg-accent/90 shadow-md active:scale-95",
-    secondary: "bg-bg-secondary text-text-primary hover:bg-border active:scale-95",
-    outline: "border border-border bg-transparent text-text-primary hover:bg-bg-secondary active:scale-95",
-    ghost: "bg-transparent text-text-secondary hover:text-text-primary hover:bg-bg-secondary active:scale-95",
-    danger: "bg-red text-white hover:bg-red/90 shadow-md active:scale-95",
+    primary: "bg-[var(--accent)] text-black font-semibold hover:opacity-90 active:scale-[0.98]",
+    secondary: "bg-[var(--background-secondary)] text-[var(--foreground)] border border-[var(--border)] hover:border-[var(--border-emphasis)] active:scale-[0.98]",
+    outline: "border border-[var(--border)] bg-transparent text-[var(--foreground)] hover:bg-[var(--background-secondary)] hover:border-[var(--border-emphasis)] active:scale-[0.98]",
+    ghost: "bg-transparent text-[var(--foreground-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--background-secondary)] active:scale-[0.98]",
+    danger: "bg-[var(--destructive)] text-white font-semibold hover:opacity-90 active:scale-[0.98]",
   };
 
   const sizes = {
-    sm: "px-3 py-1.5 text-xs",
-    md: "px-4 py-2 text-sm",
-    lg: "px-6 py-3 text-base",
+    sm: "px-3 py-1.5 text-[12px]",
+    md: "px-4 py-2 text-[13px]",
+    lg: "px-6 py-3 text-[14px]",
     icon: "p-2",
   };
 
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center rounded-lg font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed",
+        "inline-flex items-center justify-center rounded-[8px] font-sans font-medium transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(0,208,132,0.5)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]",
         variants[variant],
         sizes[size],
         className

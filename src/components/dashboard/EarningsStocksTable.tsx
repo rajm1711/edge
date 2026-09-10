@@ -33,14 +33,14 @@ export function EarningsStocksTable({ data, isLoading }: { data: EarningsStockIt
   }
 
   const getTimeDisplay = (hour?: string) => {
-    if (!hour) return <span className="font-mono text-[11px] text-[#4a5568]">-</span>;
+    if (!hour)    return <span className="font-mono text-[11px] text-[var(--foreground-muted)]">−</span>;
     switch (hour.toLowerCase()) {
       case "amc":
-        return <span className="font-mono text-[11px] text-[#f5a623]">After Market</span>;
+        return <span className="font-mono text-[11px] text-[#f59e0b]">After Market</span>;
       case "bmo":
-        return <span className="font-mono text-[11px] text-[#4d9fff]">Before Market</span>;
+        return <span className="font-mono text-[11px] text-[#3b82f6]">Before Market</span>;
       default:
-        return <span className="font-mono text-[11px] text-[#718096]">{hour}</span>;
+        return <span className="font-mono text-[11px] text-[var(--foreground-muted)]">{hour}</span>;
     }
   };
 
@@ -48,52 +48,52 @@ export function EarningsStocksTable({ data, isLoading }: { data: EarningsStockIt
     <div className="overflow-x-auto w-full">
       <table className="w-full text-left border-collapse font-sans">
         <thead>
-          <tr className="bg-bg-secondary border-b border-border">
-            <th className="py-2.5 px-4 text-[11px] font-sans font-medium uppercase tracking-[0.08em] text-text-muted">
+          <tr className="bg-[var(--background)] border-b border-[var(--border)]">
+            <th className="h-[36px] px-5 text-[11px] font-sans font-medium uppercase tracking-[0.06em] text-[var(--foreground-muted)]">
               Symbol / Company
             </th>
-            <th className="py-2.5 px-4 text-[11px] font-sans font-medium uppercase tracking-[0.08em] text-text-muted">
+            <th className="h-[36px] px-5 text-[11px] font-sans font-medium uppercase tracking-[0.06em] text-[var(--foreground-muted)]">
               Earnings Date
             </th>
-            <th className="py-2.5 px-4 text-[11px] font-sans font-medium uppercase tracking-[0.08em] text-text-muted">
+            <th className="h-[36px] px-5 text-[11px] font-sans font-medium uppercase tracking-[0.06em] text-[var(--foreground-muted)]">
               Timing
             </th>
-            <th className="py-2.5 px-4 text-[11px] font-sans font-medium uppercase tracking-[0.08em] text-text-muted">
+            <th className="h-[36px] px-5 text-[11px] font-sans font-medium uppercase tracking-[0.06em] text-[var(--foreground-muted)]">
               Price
             </th>
-            <th className="py-2.5 px-4 text-[11px] font-sans font-medium uppercase tracking-[0.08em] text-text-muted">
+            <th className="h-[36px] px-5 text-[11px] font-sans font-medium uppercase tracking-[0.06em] text-[var(--foreground-muted)]">
               Change
             </th>
-            <th className="py-2.5 px-4 text-[11px] font-sans font-medium uppercase tracking-[0.08em] text-text-muted text-right">
+            <th className="h-[36px] px-5 text-[11px] font-sans font-medium uppercase tracking-[0.06em] text-[var(--foreground-muted)] text-right">
               Action
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-border">
+        <tbody>
           {data.map((item) => {
             const isPositive = (item.change ?? 0) >= 0;
             return (
               <tr
                 key={item.ticker}
                 onClick={() => router.push(`/research?ticker=${item.ticker}`)}
-                className="group border-b border-border hover:bg-bg-hover transition-colors cursor-pointer"
+                className="group h-[48px] border-b border-[var(--border)] hover:bg-[var(--background-tertiary)] transition-colors cursor-pointer last:border-b-0"
               >
-                <td className="py-3 px-4">
+                <td className="px-5">
                   <div className="flex items-center gap-2.5">
-                    <Star className="h-[14px] w-[14px] text-text-muted group-hover:text-neutral transition-colors" />
+                    <Star className="h-[14px] w-[14px] text-[var(--foreground-muted)] group-hover:text-[#f59e0b] transition-colors" />
                     <div className="flex flex-col">
-                      <span className="font-mono text-[13px] font-medium text-text-primary uppercase">
+                      <span className="font-mono text-[13px] font-semibold text-[var(--foreground)] uppercase">
                         {item.ticker}
                       </span>
-                      <span className="text-[11px] text-text-secondary truncate max-w-[160px]">
+                      <span className="text-[11px] text-[var(--foreground-muted)] truncate max-w-[160px] font-sans">
                         {item.companyName}
                       </span>
                     </div>
                   </div>
                 </td>
-                <td className="py-3 px-4">
-                  <div className="flex items-center gap-1.5 font-mono text-[12px] text-text-primary">
-                    <Calendar className="h-3.5 w-3.5 text-text-muted" />
+                <td className="px-5">
+                  <div className="flex items-center gap-1.5 font-mono text-[12px] text-[var(--foreground)]">
+                    <Calendar className="h-3.5 w-3.5 text-[var(--foreground-muted)]" />
                     <span>
                       {new Date(item.date).toLocaleDateString("en-US", {
                         month: "short",
@@ -102,34 +102,34 @@ export function EarningsStocksTable({ data, isLoading }: { data: EarningsStockIt
                     </span>
                   </div>
                 </td>
-                <td className="py-3 px-4">{getTimeDisplay(item.hour)}</td>
-                <td className="py-3 px-4 font-mono text-[14px] font-medium text-text-primary">
+                <td className="px-5">{getTimeDisplay(item.hour)}</td>
+                <td className="px-5 font-mono text-[14px] font-medium text-[var(--foreground)]">
                   {item.price ? formatCurrency(item.price) : "-"}
                 </td>
-                <td className="py-3 px-4">
+                <td className="px-5">
                   {item.changePercent !== undefined ? (
                     <span
                       className={cn(
-                        "inline-flex items-center gap-1 rounded-[4px] px-2 py-0.5 font-mono text-[11px] font-medium",
+                        "inline-flex items-center gap-1 rounded-[4px] px-2 py-0.5 font-mono text-[12px] font-medium",
                         isPositive
-                          ? "bg-[rgba(0,208,132,0.10)] text-positive"
-                          : "bg-[rgba(255,77,77,0.10)] text-negative"
+                          ? "bg-[rgba(0,208,132,0.12)] text-[#00d084] border border-[rgba(0,208,132,0.20)]"
+                          : "bg-[rgba(239,68,68,0.12)] text-[#ef4444] border border-[rgba(239,68,68,0.20)]"
                       )}
                     >
                       {isPositive ? "▲ +" : "▼ "}
                       {formatPercent(item.changePercent)}
                     </span>
                   ) : (
-                    <span className="font-mono text-[11px] text-text-muted">-</span>
+                    <span className="font-mono text-[11px] text-[var(--foreground-muted)]">−</span>
                   )}
                 </td>
-                <td className="py-3 px-4 text-right">
+                <td className="px-5 text-right">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       router.push(`/research?ticker=${item.ticker}`);
                     }}
-                    className="p-1.5 rounded-[6px] hover:bg-border text-text-secondary hover:text-text-primary transition-colors"
+                    className="p-1.5 rounded-[8px] hover:bg-[var(--background-tertiary)] text-[var(--foreground-secondary)] hover:text-[var(--foreground)] transition-colors"
                   >
                     <ExternalLink className="h-3.5 w-3.5" />
                   </button>

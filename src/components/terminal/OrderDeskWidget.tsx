@@ -46,28 +46,28 @@ export function OrderDeskWidget({ ticker = "NVDA", currentPrice = 138.25 }: Orde
   };
 
   return (
-    <div className="w-full rounded-2xl border border-[#1a2540] bg-[#0d1421]/95 backdrop-blur-md overflow-hidden font-mono shadow-xl flex flex-col">
+    <div className="w-full rounded-[16px] border border-[var(--border)] bg-[var(--card)] overflow-hidden font-mono shadow-sm flex flex-col font-sans">
       {/* Header Bar */}
-      <div className="flex items-center justify-between p-3.5 border-b border-[#1a2540] bg-[#090f19]">
+      <div className="flex items-center justify-between p-3.5 border-b border-[var(--border)] bg-[var(--background-secondary)]">
         <div className="flex items-center gap-2">
-          <Calculator className="h-4 w-4 text-[#a78bfa]" />
-          <span className="font-bebas text-lg tracking-wide uppercase text-text-primary">Order & Risk Simulator</span>
+          <Calculator className="h-4 w-4 text-[var(--ai)]" />
+          <span className="font-sans text-sm font-semibold tracking-wider uppercase text-[var(--foreground)]">Order & Risk Simulator</span>
         </div>
-        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-bg-secondary text-text-muted border border-border">
+        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-[4px] bg-[var(--background-tertiary)] text-[var(--foreground-muted)] border border-[var(--border)]">
           ZERODHA KITE STYLE
         </span>
       </div>
 
       {/* Buy / Sell Toggle Tabs */}
-      <div className="grid grid-cols-2 p-1.5 gap-1.5 border-b border-[#1a2540] bg-[#060a10]">
+      <div className="grid grid-cols-2 p-1.5 gap-1.5 border-b border-[var(--border)] bg-[var(--background-secondary)]/50">
         <button
           type="button"
           onClick={() => setSide("BUY")}
           className={cn(
-            "py-2.5 rounded-xl font-bebas text-base tracking-wider uppercase transition-all flex items-center justify-center gap-1.5",
+            "py-2 rounded-[8px] font-mono text-xs font-bold tracking-wider uppercase transition-all flex items-center justify-center gap-1.5",
             isBuy
-              ? "bg-[#00d084] text-black shadow-lg font-bold"
-              : "text-text-muted hover:text-text-primary hover:bg-bg-secondary"
+              ? "bg-[var(--positive)] text-black shadow-sm"
+              : "text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:bg-[var(--background-secondary)]"
           )}
         >
           <ArrowUpRight className="h-4 w-4" /> BUY / LONG
@@ -76,10 +76,10 @@ export function OrderDeskWidget({ ticker = "NVDA", currentPrice = 138.25 }: Orde
           type="button"
           onClick={() => setSide("SELL")}
           className={cn(
-            "py-2.5 rounded-xl font-bebas text-base tracking-wider uppercase transition-all flex items-center justify-center gap-1.5",
+            "py-2 rounded-[8px] font-mono text-xs font-bold tracking-wider uppercase transition-all flex items-center justify-center gap-1.5",
             !isBuy
-              ? "bg-[#ff4d4d] text-white shadow-lg font-bold"
-              : "text-text-muted hover:text-text-primary hover:bg-bg-secondary"
+              ? "bg-[var(--negative)] text-white shadow-sm"
+              : "text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:bg-[var(--background-secondary)]"
           )}
         >
           <ArrowDownRight className="h-4 w-4" /> SELL / SHORT
@@ -88,17 +88,17 @@ export function OrderDeskWidget({ ticker = "NVDA", currentPrice = 138.25 }: Orde
 
       <form onSubmit={handlePlaceOrder} className="p-4 space-y-4 text-xs">
         {/* Order Type Tabs */}
-        <div className="flex items-center justify-between gap-1 bg-bg-primary p-1 rounded-xl border border-border">
+        <div className="flex items-center justify-between gap-1 bg-[var(--background-tertiary)] p-1 rounded-[8px] border border-[var(--border)]">
           {(["LIMIT", "MARKET", "STOP_LOSS"] as const).map(type => (
             <button
               key={type}
               type="button"
               onClick={() => setOrderType(type)}
               className={cn(
-                "flex-1 py-1.5 rounded-lg text-[10px] font-bold uppercase transition-all text-center",
+                "flex-1 py-1.5 rounded-[6px] text-[10px] font-mono font-bold uppercase transition-all text-center",
                 orderType === type
-                  ? "bg-bg-card text-text-primary border border-border shadow-sm"
-                  : "text-text-muted hover:text-text-primary"
+                  ? "bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] shadow-sm"
+                  : "text-[var(--foreground-muted)] hover:text-[var(--foreground)]"
               )}
             >
               {type.replace("_", " ")}
@@ -109,18 +109,18 @@ export function OrderDeskWidget({ ticker = "NVDA", currentPrice = 138.25 }: Orde
         {/* Quantity & Price Input Grid */}
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-1">
-            <label className="text-[10px] uppercase font-bold text-text-muted">Quantity (Shares)</label>
+            <label className="text-[10px] uppercase font-mono tracking-wider text-[var(--foreground-muted)]">Quantity (Shares)</label>
             <input
               type="number"
               min="1"
               value={shares}
               onChange={e => setShares(Math.max(1, parseInt(e.target.value) || 1))}
-              className="w-full h-10 px-3 rounded-xl bg-bg-secondary border border-border text-sm font-bold text-text-primary focus:border-accent focus:outline-none"
+              className="w-full h-10 px-3 rounded-[8px] bg-[var(--background-secondary)] border border-[var(--border)] text-sm font-mono font-bold text-[var(--foreground)] focus:border-[var(--accent)] focus:outline-none"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-[10px] uppercase font-bold text-text-muted">
+            <label className="text-[10px] uppercase font-mono tracking-wider text-[var(--foreground-muted)]">
               {orderType === "MARKET" ? "Market Price" : "Limit Price ($)"}
             </label>
             <input
@@ -129,15 +129,15 @@ export function OrderDeskWidget({ ticker = "NVDA", currentPrice = 138.25 }: Orde
               disabled={orderType === "MARKET"}
               value={orderType === "MARKET" ? currentPrice : limitPrice}
               onChange={e => setLimitPrice(parseFloat(e.target.value) || currentPrice)}
-              className="w-full h-10 px-3 rounded-xl bg-bg-secondary border border-border text-sm font-bold text-text-primary focus:border-accent focus:outline-none disabled:opacity-50"
+              className="w-full h-10 px-3 rounded-[8px] bg-[var(--background-secondary)] border border-[var(--border)] text-sm font-mono font-bold text-[var(--foreground)] focus:border-[var(--accent)] focus:outline-none disabled:opacity-50"
             />
           </div>
         </div>
 
         {/* Risk Management inputs: SL & TP */}
-        <div className="grid grid-cols-2 gap-3 pt-2 border-t border-[#1a2540]">
+        <div className="grid grid-cols-2 gap-3 pt-2 border-t border-[var(--border)]">
           <div className="space-y-1">
-            <label className="text-[10px] uppercase font-bold text-[#ff4d4d] flex items-center gap-1">
+            <label className="text-[10px] uppercase font-mono tracking-wider text-[var(--negative)] flex items-center gap-1">
               Stop Loss ($)
             </label>
             <input
@@ -145,12 +145,12 @@ export function OrderDeskWidget({ ticker = "NVDA", currentPrice = 138.25 }: Orde
               step="0.01"
               value={stopLoss}
               onChange={e => setStopLoss(parseFloat(e.target.value) || 0)}
-              className="w-full h-10 px-3 rounded-xl bg-bg-secondary border border-[#ff4d4d]/30 text-sm font-bold text-[#ff4d4d] focus:border-[#ff4d4d] focus:outline-none"
+              className="w-full h-10 px-3 rounded-[8px] bg-[var(--background-secondary)] border border-[var(--negative)]/30 text-sm font-mono font-bold text-[var(--negative)] focus:border-[var(--negative)] focus:outline-none"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-[10px] uppercase font-bold text-[#00d084] flex items-center gap-1">
+            <label className="text-[10px] uppercase font-mono tracking-wider text-[var(--positive)] flex items-center gap-1">
               Take Profit ($)
             </label>
             <input
@@ -158,28 +158,28 @@ export function OrderDeskWidget({ ticker = "NVDA", currentPrice = 138.25 }: Orde
               step="0.01"
               value={takeProfit}
               onChange={e => setTakeProfit(parseFloat(e.target.value) || 0)}
-              className="w-full h-10 px-3 rounded-xl bg-bg-secondary border border-[#00d084]/30 text-sm font-bold text-[#00d084] focus:border-[#00d084] focus:outline-none"
+              className="w-full h-10 px-3 rounded-[8px] bg-[var(--background-secondary)] border border-[var(--positive)]/30 text-sm font-mono font-bold text-[var(--positive)] focus:border-[var(--positive)] focus:outline-none"
             />
           </div>
         </div>
 
         {/* Risk & Margin Summary Box */}
-        <div className="p-3 rounded-xl bg-[#070b12] border border-[#1a2540] space-y-2 tabular-nums">
+        <div className="p-3 rounded-[8px] bg-[var(--background-secondary)] border border-[var(--border)] space-y-2 font-mono tabular-nums">
           <div className="flex justify-between items-center text-[11px]">
-            <span className="text-text-muted">Order Value:</span>
-            <span className="font-bold text-text-primary">{formatCurrency(totalCost)}</span>
+            <span className="text-[var(--foreground-muted)]">Order Value:</span>
+            <span className="font-bold text-[var(--foreground)]">{formatCurrency(totalCost)}</span>
           </div>
           <div className="flex justify-between items-center text-[11px]">
-            <span className="text-text-muted">Potential Risk / Reward:</span>
-            <span className="font-bold text-accent">1 : {riskRewardRatio} R</span>
+            <span className="text-[var(--foreground-muted)]">Potential Risk / Reward:</span>
+            <span className="font-bold text-[var(--accent)]">1 : {riskRewardRatio} R</span>
           </div>
           <div className="flex justify-between items-center text-[11px]">
-            <span className="text-[#00d084]">Target Profit:</span>
-            <span className="font-bold text-[#00d084]">+{formatCurrency(potentialProfit)}</span>
+            <span className="text-[var(--positive)]">Target Profit:</span>
+            <span className="font-bold text-[var(--positive)]">+{formatCurrency(potentialProfit)}</span>
           </div>
           <div className="flex justify-between items-center text-[11px]">
-            <span className="text-[#ff4d4d]">Max Loss:</span>
-            <span className="font-bold text-[#ff4d4d]">-{formatCurrency(potentialLoss)}</span>
+            <span className="text-[var(--negative)]">Max Loss:</span>
+            <span className="font-bold text-[var(--negative)]">-{formatCurrency(potentialLoss)}</span>
           </div>
         </div>
 
@@ -187,16 +187,16 @@ export function OrderDeskWidget({ ticker = "NVDA", currentPrice = 138.25 }: Orde
         <button
           type="submit"
           className={cn(
-            "w-full h-12 rounded-xl font-bebas text-xl tracking-widest uppercase transition-all shadow-lg flex items-center justify-center gap-2",
+            "w-full h-11 rounded-[8px] font-sans font-semibold text-sm tracking-wider uppercase transition-all shadow-sm flex items-center justify-center gap-2",
             isBuy
-              ? "bg-[#00d084] text-black hover:bg-[#00d084]/90"
-              : "bg-[#ff4d4d] text-white hover:bg-[#ff4d4d]/90"
+              ? "bg-[var(--positive)] text-black hover:opacity-90"
+              : "bg-[var(--negative)] text-white hover:opacity-90"
           )}
         >
           Execute {side} Order · {ticker}
         </button>
 
-        <p className="text-[10px] text-[#4a5568] italic text-center">
+        <p className="text-[10px] text-[var(--foreground-muted)] italic text-center font-mono">
           Simulated order execution for educational and portfolio journal testing only.
         </p>
       </form>

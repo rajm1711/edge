@@ -18,9 +18,10 @@ export function EarningsHistory({ ticker, data }: EarningsHistoryProps) {
     const [aiPreview, setAiPreview] = useState<any>(null);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
 
-    if (!data || data.length === 0) return null;
+    const list = Array.isArray(data) ? data : Array.isArray((data as any)?.earnings) ? (data as any).earnings : [];
+    if (!list || list.length === 0) return null;
 
-    const chartData = [...data].reverse().map(item => ({
+    const chartData = [...list].reverse().map(item => ({
         period: item.period,
         actual: item.actual,
         estimate: item.estimate,
@@ -39,42 +40,43 @@ export function EarningsHistory({ ticker, data }: EarningsHistoryProps) {
     return (
         <div className="space-y-4">
             <Card variant="default">
-                <CardHeader className="py-3 flex flex-row items-center justify-between">
-                    <h3 className="font-bebas text-lg tracking-wide uppercase text-text-primary">Earnings Performance</h3>
+                <CardHeader className="py-3.5 flex flex-row items-center justify-between">
+                    <h3 className="font-sans text-sm font-semibold uppercase tracking-wider text-[var(--foreground)]">Earnings Performance</h3>
                     <Button
                         size="sm"
                         variant="outline"
                         onClick={getAiPreview}
                         isLoading={isAnalyzing}
-                        className="h-8 px-3 text-[10px] uppercase font-bold tracking-widest border-accent/20 text-accent hover:bg-accent/5"
+                        className="h-8 px-3 text-[10px] uppercase font-mono tracking-wider border-[var(--accent)]/30 text-[var(--accent)] hover:bg-[var(--accent)]/10"
                     >
-                        <Sparkles className="h-3 w-3 mr-2" />
+                        <Sparkles className="h-3 w-3 mr-1.5" />
                         AI Preview
                     </Button>
                 </CardHeader>
                 <CardContent className="h-[250px] p-4">
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" opacity={0.2} />
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" opacity={0.5} />
                             <XAxis
                                 dataKey="period"
                                 axisLine={false}
                                 tickLine={false}
-                                tick={{ fontSize: 10, fill: "var(--text-muted)", fontFamily: "var(--font-jetbrains)" }}
+                                tick={{ fontSize: 10, fill: "var(--foreground-muted)", fontFamily: "var(--font-jetbrains)" }}
                             />
                             <YAxis
                                 axisLine={false}
                                 tickLine={false}
-                                tick={{ fontSize: 10, fill: "var(--text-muted)", fontFamily: "var(--font-jetbrains)" }}
+                                tick={{ fontSize: 10, fill: "var(--foreground-muted)", fontFamily: "var(--font-jetbrains)" }}
                                 tickFormatter={(val) => `$${val}`}
                             />
                             <Tooltip
-                                cursor={{ fill: 'var(--bg-secondary)', opacity: 0.4 }}
+                                cursor={{ fill: 'var(--background-secondary)', opacity: 0.4 }}
                                 contentStyle={{
-                                    backgroundColor: 'var(--bg-card)',
+                                    backgroundColor: 'var(--card)',
                                     borderColor: 'var(--border)',
                                     borderRadius: '8px',
                                     fontSize: '11px',
+                                    color: 'var(--foreground)',
                                     fontFamily: 'var(--font-jetbrains)'
                                 }}
                             />
@@ -85,7 +87,7 @@ export function EarningsHistory({ ticker, data }: EarningsHistoryProps) {
                                 wrapperStyle={{ fontSize: '9px', fontFamily: 'var(--font-jetbrains)', textTransform: 'uppercase', paddingBottom: '15px' }}
                             />
                             <Bar dataKey="actual" fill="var(--accent)" radius={[4, 4, 0, 0]} name="Actual" />
-                            <Bar dataKey="estimate" fill="var(--text-muted)" radius={[4, 4, 0, 0]} name="Estimate" opacity={0.5} />
+                            <Bar dataKey="estimate" fill="var(--foreground-muted)" radius={[4, 4, 0, 0]} name="Estimate" opacity={0.4} />
                         </BarChart>
                     </ResponsiveContainer>
                 </CardContent>
@@ -103,29 +105,29 @@ export function EarningsHistory({ ticker, data }: EarningsHistoryProps) {
                         </div>
 
                         <div className="space-y-4">
-                            <p className="text-xs text-text-primary leading-relaxed font-medium">&quot;{aiPreview.keySummary}&quot;</p>
+                            <p className="text-xs text-[var(--foreground)] leading-relaxed font-medium">&quot;{aiPreview.keySummary}&quot;</p>
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <p className="text-[9px] uppercase font-bold text-text-muted tracking-[0.2em]">Expected Volatility</p>
-                                    <div className="p-2 bg-bg-card rounded-lg border border-border/50 text-xs font-mono font-bold text-accent">
+                                    <p className="text-[9px] uppercase font-bold text-[var(--foreground-muted)] tracking-[0.2em]">Expected Volatility</p>
+                                    <div className="p-2 bg-[var(--card)] rounded-lg border border-[var(--border)]/50 text-xs font-mono font-bold text-[var(--accent)]">
                                         {aiPreview.expectedVolatility}
                                     </div>
                                 </div>
                                 <div className="space-y-2">
-                                    <p className="text-[9px] uppercase font-bold text-text-muted tracking-[0.2em]">Whisper EPS</p>
-                                    <div className="p-2 bg-bg-card rounded-lg border border-border/50 text-xs font-mono font-bold text-text-primary">
+                                    <p className="text-[9px] uppercase font-bold text-[var(--foreground-muted)] tracking-[0.2em]">Whisper EPS</p>
+                                    <div className="p-2 bg-[var(--card)] rounded-lg border border-[var(--border)]/50 text-xs font-mono font-bold text-[var(--foreground)]">
                                         {aiPreview.whisperNumber}
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="bg-bg-card/50 p-3 rounded-xl border border-border/30">
-                                <p className="text-[9px] uppercase font-bold text-text-muted mb-2 tracking-[0.2em]">Likely Catalysts</p>
+                            <div className="bg-[var(--card)]/50 p-3 rounded-xl border border-[var(--border)]/30">
+                                <p className="text-[9px] uppercase font-bold text-[var(--foreground-muted)] mb-2 tracking-[0.2em]">Likely Catalysts</p>
                                 <ul className="space-y-1">
                                     {aiPreview?.catalysts?.slice(0, 3).map((c: string, i: number) => (
-                                        <li key={i} className="text-[10px] text-text-secondary flex items-start gap-2">
-                                            <div className="h-1 w-1 bg-accent rounded-full mt-1.5 flex-shrink-0" />
+                                        <li key={i} className="text-[10px] text-[var(--foreground-muted)] flex items-start gap-2">
+                                            <div className="h-1 w-1 bg-[var(--accent)] rounded-full mt-1.5 flex-shrink-0" />
                                             {c}
                                         </li>
                                     ))}

@@ -18,21 +18,21 @@ export function FundamentalsGrid({ data }: FundamentalsGridProps) {
     { label: "Div Yield", value: data.dividendYield ? `${data.dividendYield.toFixed(2)}%` : "0.00%", sub: "Annualized" },
     { label: "Rev Growth", value: data.revenueGrowth ? `${data.revenueGrowth.toFixed(2)}%` : "N/A", sub: "Year over Year" },
     { label: "Profit Margin", value: data.profitMargin ? `${data.profitMargin.toFixed(2)}%` : "N/A", sub: "Net Efficiency" },
-    { label: "52W High", value: formatCurrency(data["52WeekHigh"]) || "N/A", sub: "Projected Peak" },
+    { label: "52W High", value: formatCurrency(data["52WeekHigh"]) || "N/A", sub: "Peak Range" },
   ];
 
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       {metrics.map((metric, i) => (
-        <Card key={i} variant="default" className="hover:border-accent/20 transition-all group">
+        <Card key={i} variant="default" className="hover:border-[var(--accent)]/30 transition-all group">
           <CardContent className="p-4">
-            <p className="text-[10px] font-mono font-bold text-text-muted uppercase tracking-widest mb-1 group-hover:text-accent transition-colors">
+            <p className="text-[10px] font-mono uppercase tracking-wider text-[var(--foreground-muted)] mb-1 group-hover:text-[var(--accent)] transition-colors">
               {metric.label}
             </p>
-            <p className="text-lg font-mono font-bold text-text-primary">
+            <p className="text-[18px] font-mono font-medium text-[var(--foreground)] tracking-tight">
               {metric.value}
             </p>
-            <p className="text-[9px] text-text-muted mt-1 font-medium">
+            <p className="text-[10px] text-[var(--foreground-muted)] mt-1">
               {metric.sub}
             </p>
           </CardContent>
